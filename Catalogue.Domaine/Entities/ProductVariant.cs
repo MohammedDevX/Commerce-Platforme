@@ -18,18 +18,14 @@ namespace Catalogue.Domaine.Entities
         public ProductVariant()
         {}
 
-        public ProductVariant(Guid productId, decimal? price)
+        public ProductVariant(Guid productId, Money? price)
         {
             if (productId == Guid.Empty)
                 throw new ArgumentException("ProductId cannot by empty", nameof(productId));
-            
-            
 
             Id = Guid.NewGuid();
             ProductId = productId;
             Price = price;
         }
-
-
     }
 }

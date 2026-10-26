@@ -5,16 +5,19 @@
         public Guid Id { get; private set; }
         public string Name { get; private set; } = string.Empty;
 
-        public Company(string CompanyName)
+        // Empty ctor for EF 
+        public Company() {}
+
+        public Company(string companyName)
         {
             Id = Guid.NewGuid();
-            Rename(CompanyName);
+            Rename(companyName);
         }
 
         public void Rename(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("The name cannot be emoty", nameof(name));
+                throw new ArgumentException("The name cannot be empty", nameof(name));
 
             Name = name.Trim();
         }

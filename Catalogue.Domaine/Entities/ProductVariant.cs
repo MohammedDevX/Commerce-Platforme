@@ -13,5 +13,7 @@ namespace Catalogue.Domaine.Entities
         public decimal Price { get; private set; }
         public string Sku { get; private set; } = string.Empty;
 
+
+        
     }
 }

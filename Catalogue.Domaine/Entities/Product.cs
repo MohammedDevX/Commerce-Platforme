@@ -8,11 +8,14 @@ namespace Catalogue.Domaine.Entities
         public Guid CompanyId { get; private set; }
         public string Name { get; private set; } = string.Empty;
 
-        public Product(Guid CompanyId, string ProductName) 
+        public Product()
+        {}
+
+        public Product(Guid companyId, string productName) 
         {
             Id = Guid.NewGuid();
-            this.CompanyId = CompanyId;
-            Name = ProductName;
+            CompanyId = companyId;
+            Name = productName;
         }
     }
 }

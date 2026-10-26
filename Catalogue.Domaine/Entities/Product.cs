@@ -1,12 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 
 namespace Catalogue.Domaine.Entities
 {
-    internal class Product
+    public class Product
     {
+        public Guid Id { get; private set; }
+        public Guid CompanyId { get; private set; }
+        public string Name { get; private set; } = string.Empty;
+
+        public Product(Guid CompanyId, string ProductName) 
+        {
+            Id = Guid.NewGuid();
+            this.CompanyId = CompanyId;
+            Name = ProductName;
+        }
     }
 }

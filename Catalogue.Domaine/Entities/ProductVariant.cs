@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Catalogue.Domaine.Entities
 {
-    internal class ProductVariant
+    public class ProductVariant
     {
+        public Guid Id { get; private set; }
+        public Guid ProductId { get; private set; }
+        public decimal Price { get; private set; }
+        public string Sku { get; private set; } = string.Empty;
+
     }
 }

@@ -7,6 +7,7 @@ namespace Catalogue.Domaine.Entities
         public Guid Id { get; private set; }
         public Guid CompanyId { get; private set; }
         public string Name { get; private set; } = string.Empty;
+        public IReadOnlyList<ProductVariant> ProductVariants { get; set; }
 
         public Product()
         {}
@@ -16,6 +17,7 @@ namespace Catalogue.Domaine.Entities
             Id = Guid.NewGuid();
             CompanyId = companyId;
             Name = productName;
+            ProductVariants = new List<ProductVariant>();
         }
     }
 }

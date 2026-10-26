@@ -1,12 +1,15 @@
-﻿namespace Catalogue.Domaine.Entities
+﻿using System.Collections.ObjectModel;
+
+namespace Catalogue.Domaine.Entities
 {
     public class Company
     {
         public Guid Id { get; private set; }
         public string Name { get; private set; } = string.Empty;
+        public IReadOnlyList<Product> Products { get; private set; } = new List<Product>();
 
         // Empty ctor for EF 
-        public Company() {}
+        private Company() {}
 
         public Company(string companyName)
         {

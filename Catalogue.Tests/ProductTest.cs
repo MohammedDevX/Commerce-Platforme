@@ -5,7 +5,7 @@ namespace Catalogue.Tests
     public class ProductTest
     {
         [Fact]
-        public void Constructor_Validate_Test()
+        public void Constructor_WithValidData_InitializesProduct()
         {
             Guid id = Guid.NewGuid();
             Product product = new(id, "Razor mouse");

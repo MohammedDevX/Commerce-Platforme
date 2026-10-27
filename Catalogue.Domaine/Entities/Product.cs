@@ -1,4 +1,5 @@
-﻿using System.Text.RegularExpressions;
+﻿using Catalogue.Domaine.Entities.ValueObjects;
+using System.Text.RegularExpressions;
 
 namespace Catalogue.Domaine.Entities
 {
@@ -8,9 +9,11 @@ namespace Catalogue.Domaine.Entities
         public Guid CompanyId { get; private set; }
         public string Name { get; private set; } = string.Empty;
         public Company Company { get; set; }
-        public IReadOnlyList<ProductVariant> ProductVariants { get; private set; } = new List<ProductVariant>();
+        private readonly List<ProductVariant> _variants = new List<ProductVariant>();
+        // This syntax is an explisite {get => return _variants;}
+        public IReadOnlyCollection<ProductVariant> ProductVariants => _variants;
 
-        public Product()
+        private Product()
         {
         }
 
@@ -31,6 +34,12 @@ namespace Catalogue.Domaine.Entities
                 throw new ArgumentException("Product Name cannot be empty, null or contain only spaces");
 
             Name = productName.Trim();
+        }
+
+        public void AddProductVariant(Money price, string sku)
+        {
+            ProductVariant productVariant = new(Id, price, sku);
+            _variants.Add(productVariant);
         }
     }
 }

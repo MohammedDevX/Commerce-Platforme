@@ -13,7 +13,7 @@ namespace Catalogue.Domaine.Entities.ValueObjects
         public Money(decimal price)
         {
             if (price < 0)
-                throw new ArgumentException("Price cannot be lower than 0", nameof(price));
+                throw new ArgumentException("Price cannot be lower than 0");
 
             Price = price;
         }

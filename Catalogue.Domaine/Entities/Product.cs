@@ -9,9 +9,13 @@ namespace Catalogue.Domaine.Entities
         public Guid CompanyId { get; private set; }
         public string Name { get; private set; } = string.Empty;
         public Company Company { get; set; }
-        private readonly List<ProductVariant> _variants = new List<ProductVariant>();
+        private readonly List<ProductVariant> _variants = new();
         // This syntax is an explisite {get => return _variants;}
-        public IReadOnlyCollection<ProductVariant> ProductVariants => _variants;
+        /* 
+         * And .AsReadOnly() wrap the original collection into ReadOnlyCollection so if someone outside of
+         * the class try to modify in the collection an InvalidCastException is thrown
+         */
+        public IReadOnlyCollection<ProductVariant> ProductVariants => _variants.AsReadOnly();
 
         private Product()
         {

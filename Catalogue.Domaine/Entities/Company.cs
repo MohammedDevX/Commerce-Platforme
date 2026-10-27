@@ -20,9 +20,9 @@ namespace Catalogue.Domaine.Entities
         public void Rename(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
-                throw new ArgumentException("The name cannot be empty", nameof(name));
+                throw new ArgumentException("The name cannot be empty");
 
-            Name = name.Trim();
+            Name = name.Trim().ToUpper();
         }
     }
 }

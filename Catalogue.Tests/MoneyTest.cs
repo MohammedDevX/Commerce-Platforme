@@ -9,7 +9,7 @@ public class MoneyTest
     {
         decimal price = 10m;
         Money money = new(price);
-        Console.WriteLine("The price format is correcte : " + price);
+        Assert.Equal(10m, money.Price);
     }
 
     [Fact]
@@ -17,7 +17,7 @@ public class MoneyTest
     {
         decimal price = 0;
         Money money = new(price);
-        Console.WriteLine("The price accepte zero as value : " + price);
+        Assert.Equal(0, money.Price);
     }
 
     [Fact]
@@ -54,9 +54,9 @@ public class MoneyTest
     {
         decimal price1 = 30;
         decimal price2 = 26;
-        Console.WriteLine(new Money(price1).Price + new Money(price2).Price);
-        Console.WriteLine(new Money(price1).Price - new Money(price2).Price);
-        Console.WriteLine(new Money(price1).Price * new Money(price2).Price);
-        Console.WriteLine(new Money(price1).Price / new Money(price2).Price);
+        Assert.Equal(56, new Money(price1).Price + new Money(price2).Price);
+        Assert.Equal(4, new Money(price1).Price - new Money(price2).Price);
+        Assert.Equal(780, new Money(price1).Price * new Money(price2).Price);
+        Assert.Equal(1.15m, Math.Round(new Money(price1).Price / new Money(price2).Price, 2));
     }
 }

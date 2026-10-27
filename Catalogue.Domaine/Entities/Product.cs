@@ -1,4 +1,6 @@
-﻿namespace Catalogue.Domaine.Entities
+﻿using System.Text.RegularExpressions;
+
+namespace Catalogue.Domaine.Entities
 {
     public class Product
     {
@@ -14,9 +16,21 @@
 
         public Product(Guid companyId, string productName) 
         {
+            if (companyId == Guid.Empty)
+                throw new ArgumentException("CompanyId cannot by empty");
+
+            Rename(productName);
+
             Id = Guid.NewGuid();
             CompanyId = companyId;
-            Name = productName;
+        }
+
+        public void Rename(string productName)
+        {
+            if (string.IsNullOrWhiteSpace(productName))
+                throw new ArgumentException("Product Name cannot be empty, null or contain only spaces");
+
+            Name = productName.Trim();
         }
     }
 }

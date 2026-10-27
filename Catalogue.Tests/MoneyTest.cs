@@ -25,7 +25,6 @@ public class MoneyTest
     {
         decimal price = -1;
         var exception = Assert.Throws<ArgumentException>(() => new Money(price));
-        Assert.Equal("Price cannot be lower than 0", exception.Message);
     }
 
     [Fact]

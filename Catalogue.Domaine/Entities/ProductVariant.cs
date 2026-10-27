@@ -24,14 +24,13 @@ namespace Catalogue.Domaine.Entities
             if (productId == Guid.Empty)
                 throw new ArgumentException("ProductId cannot by empty", nameof(productId));
 
-            Id = Guid.NewGuid();
-            ProductId = productId;
-            Price = price;
-
             var skuFormatValidation = IsFormatValide(sku);
             if (skuFormatValidation.isValid == false)
                 throw new ArgumentException("Sku format is invalide", nameof(sku));
 
+            Id = Guid.NewGuid();
+            ProductId = productId;
+            Price = price;
             Sku = skuFormatValidation.normalizedSku!;
         }
 

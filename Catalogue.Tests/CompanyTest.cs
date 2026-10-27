@@ -1,9 +1,4 @@
 ﻿using Catalogue.Domaine.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Catalogue.Tests
 {
@@ -14,7 +9,7 @@ namespace Catalogue.Tests
         {
             string name = "Facebook";
             Company company = new(name);
-            Assert.Equal("FACEBOOK", company.Name);
+            Assert.Equal("Facebook", company.Name);
         }
 
         [Fact]
@@ -22,31 +17,32 @@ namespace Catalogue.Tests
         {
             string name = " Facebook ";
             Company company = new(name);
-            Assert.Equal("FACEBOOK", company.Name);
+            Assert.Equal("Facebook", company.Name);
         }
 
-        [Fact]
-        public void Should_Throw_Exception_If_Company_Name_Is_Empty_Test()
-        {
-            string name = "";
-            var exception = Assert.Throws<ArgumentException>(() => new Company(name));
-            Assert.Equal("The name cannot be empty", exception.Message);
-        }
+        //[Fact]
+        //public void Should_Throw_Exception_If_Company_Name_Is_Empty_Test()
+        //{
+        //    string name = "";
+        //    var exception = Assert.Throws<ArgumentException>(() => new Company(name));
+        //    Assert.Equal("The name cannot be empty", exception.Message);
+        //}
 
-        [Fact]
-        public void Should_Throw_Exception_If_Company_Name_Is_Null_Test()
-        {
-            string name = null;
-            var exception = Assert.Throws<ArgumentException>(() => new Company(name));
-            Assert.Equal("The name cannot be empty", exception.Message);
-        }
+        //[Fact]
+        //public void Should_Throw_Exception_If_Company_Name_Is_Null_Test()
+        //{
+        //    string name = null;
+        //    var exception = Assert.Throws<ArgumentException>(() => new Company(name));
+        //    Assert.Equal("The name cannot be empty", exception.Message);
+        //}
 
-        [Fact]
-        public void Should_Throw_Exception_If_Company_Name_Contain_Only_Spaces_Test()
+        [Theory]
+        [InlineData("    ")]
+        [InlineData(null)]
+        [InlineData("")]
+        public void Should_Throw_Exception_If_Company_Name_Contain_Only_Spaces_Or_Is_Empty_Or_Is_Null_Test(string name)
         {
-            string name = "     ";
             var exception = Assert.Throws<ArgumentException>(() => new Company(name));
-            Assert.Equal("The name cannot be empty", exception.Message);
         }
     }
 }

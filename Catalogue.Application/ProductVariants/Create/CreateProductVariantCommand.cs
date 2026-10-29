@@ -6,6 +6,6 @@ namespace Catalogue.Application.ProductVariants.Create
     {
         public Guid ProductId { get; init; }
         public decimal Price { get; init; }
-        public string Sku { get; init; }
+        public required string Sku { get; init; }
     }
 }

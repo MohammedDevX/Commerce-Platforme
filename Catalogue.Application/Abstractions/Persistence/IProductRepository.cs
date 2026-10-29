@@ -6,6 +6,6 @@ namespace Catalogue.Application.Abstractions.Persistence
     {
         public Task<Product> GetProductByIdAsync(Guid productId, CancellationToken ct);
         // The aggregat root is responsible to add ProductVariant
-        public Task AddProductVariantAsync(ProductVariant productVariant, CancellationToken ct);
+        //public Task AddProductVariantAsync(ProductVariant productVariant, CancellationToken ct);
     }
 }

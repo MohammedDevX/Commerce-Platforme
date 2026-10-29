@@ -20,7 +20,7 @@ namespace Catalogue.Application.ProductVariants.Create
             await _companyRepository.GetCompanyByIdAsync(product.CompanyId, ct); // throw new NotFoundException();
 
             var variantExisting = await _productVariantRepository.ExistsSkuForCompanyAsync(command.Sku, ct);
-            if (variantExisting == false)
+            if (variantExisting)
                 // throw Conflict exception !!!
 
             product.AddProductVariant(new Money(command.Price), command.Sku);

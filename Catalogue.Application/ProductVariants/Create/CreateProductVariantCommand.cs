@@ -4,8 +4,8 @@ namespace Catalogue.Application.ProductVariants.Create
 {
     public record CreateProductVariantCommand
     {
-        public Guid ProductId { get; set; }
-        public Money Price { get; set; }
-        public string Sku { get; set; }
+        public Guid ProductId { get; init; }
+        public decimal Price { get; init; }
+        public string Sku { get; init; }
     }
 }

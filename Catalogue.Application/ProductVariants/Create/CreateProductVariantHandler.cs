@@ -1,11 +1,16 @@
 ﻿using Catalogue.Application.Abstractions.Persistence;
+using Catalogue.Domaine.Entities.ValueObjects;
 
 namespace Catalogue.Application.ProductVariants.Create
 {
-    public class CreateProductVariantHandler(IProductRepository productRepositiry, ICompanyRepository companyRepository)
+    public class CreateProductVariantHandler(
+        IProductRepository productRepositiry, 
+        ICompanyRepository companyRepository,
+        IProductVariantRepository productVariantRepository)
     {
         private readonly IProductRepository _productRepository = productRepositiry;
         private readonly ICompanyRepository _companyRepository = companyRepository;
+        private readonly IProductVariantRepository _productVariantRepository = productVariantRepository;
 
         public async Task Handle(CreateProductVariantCommand command, CancellationToken ct)
         {
@@ -14,7 +19,11 @@ namespace Catalogue.Application.ProductVariants.Create
 
             await _companyRepository.GetCompanyByIdAsync(product.CompanyId, ct); // throw new NotFoundException();
 
-            product.AddProductVariant(command.Price, command.Sku);
+            var variantExisting = await _productVariantRepository.ExistsSkuForCompanyAsync(command.Sku, ct);
+            if (variantExisting == false)
+                // throw Conflict exception !!!
+
+            product.AddProductVariant(new Money(command.Price), command.Sku);
 
             // Save the variant in DB
         }

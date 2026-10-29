@@ -19,11 +19,12 @@ namespace Catalogue.Application.ProductVariants.Create
             // throw NotFoundException if product doesnt existe after installing EF !!!
             var product = await _productRepository.GetProductByIdAsync(command.ProductId, ct) ?? throw new NotFoundException(nameof(Product), command.ProductId);
 
-            var variantExisting = await _productVariantRepository.ExistsSkuForCompanyAsync(command.Sku, product.CompanyId, ct);
+            Sku sku = new Sku(command.Sku);
+            var variantExisting = await _productVariantRepository.ExistsSkuForCompanyAsync(sku.SKU, product.CompanyId, ct);
             if (variantExisting)
                 throw new ConflictException($"Variant with SKU {command.Sku} already existe in company with id {product.CompanyId}");
 
-            product.AddProductVariant(new Money(command.Price), command.Sku);
+            product.AddProductVariant(new Money(command.Price), sku);
 
             // Save the variant in DB
             await _unitOfWork.SaveChangesAsync(ct);

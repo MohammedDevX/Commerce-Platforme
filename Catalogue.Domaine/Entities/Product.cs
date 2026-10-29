@@ -40,7 +40,7 @@ namespace Catalogue.Domaine.Entities
             Name = productName.Trim();
         }
 
-        public void AddProductVariant(Money price, string sku)
+        public void AddProductVariant(Money price, Sku sku)
         {
             ProductVariant productVariant = new(Id, price, sku);
             _variants.Add(productVariant);

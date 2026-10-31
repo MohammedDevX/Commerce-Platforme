@@ -1,6 +1,6 @@
 ﻿using Catalogue.Domaine.Entities.ValueObjects;
 
-namespace Catalogue.Tests;
+namespace Catalogue.Tests.Domaine.ValueObjects;
 
 public class MoneyTest
 {

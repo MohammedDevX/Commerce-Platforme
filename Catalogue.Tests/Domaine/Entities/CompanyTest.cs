@@ -1,6 +1,6 @@
 ﻿using Catalogue.Domaine.Entities;
 
-namespace Catalogue.Tests
+namespace Catalogue.Tests.Domaine.Entities
 {
     public class CompanyTest
     {

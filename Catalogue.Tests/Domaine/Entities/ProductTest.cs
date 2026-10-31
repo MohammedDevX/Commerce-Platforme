@@ -2,7 +2,7 @@
 using Catalogue.Domaine.Entities.ValueObjects;
 using System.Linq;
 
-namespace Catalogue.Tests
+namespace Catalogue.Tests.Domaine.Entities
 {
     public class ProductTest
     {
@@ -39,9 +39,10 @@ namespace Catalogue.Tests
         public void Should_Product_Add_Variant_Test()
         {
             Product product = new(Guid.NewGuid(), "Razor Mouse");
-            product.AddProductVariant(new Money(140m), "RAZOR-101");
+            Sku sku = new("RAZOR-101");
+            product.AddProductVariant(new Money(140m), sku);
             Assert.Single(product.ProductVariants);
-            Assert.True(product.ProductVariants?.Any(p => p.Sku == "RAZOR-101"));
+            Assert.True(product.ProductVariants?.Any(p => p.SKU.SKU == "RAZOR-101"));
         }
     }
 }

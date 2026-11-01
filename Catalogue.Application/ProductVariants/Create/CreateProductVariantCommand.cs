@@ -2,10 +2,7 @@
 
 namespace Catalogue.Application.ProductVariants.Create
 {
-    public record CreateProductVariantCommand
+    public record CreateProductVariantCommand(Guid ProductId, decimal Price, string Sku)
     {
-        public Guid ProductId { get; init; }
-        public decimal Price { get; init; }
-        public required string Sku { get; init; }
     }
 }

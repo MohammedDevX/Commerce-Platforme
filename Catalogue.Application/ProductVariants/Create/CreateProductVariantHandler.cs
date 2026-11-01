@@ -16,15 +16,16 @@ namespace Catalogue.Application.ProductVariants.Create
 
         public async Task Handle(CreateProductVariantCommand command, CancellationToken ct)
         {
+            Money price = new Money(command.Price);
+            Sku sku = new Sku(command.Sku);
             // throw NotFoundException if product doesnt existe after installing EF !!!
             var product = await _productRepository.GetProductByIdAsync(command.ProductId, ct) ?? throw new NotFoundException(nameof(Product), command.ProductId);
 
-            Sku sku = new Sku(command.Sku);
             var variantExisting = await _productVariantRepository.ExistsSkuForCompanyAsync(sku.SKU, product.CompanyId, ct);
             if (variantExisting)
                 throw new ConflictException($"Variant with SKU {command.Sku} already existe in company with id {product.CompanyId}");
 
-            product.AddProductVariant(new Money(command.Price), sku);
+            product.AddProductVariant(price, sku);
 
             // Save the variant in DB
             await _unitOfWork.SaveChangesAsync(ct);

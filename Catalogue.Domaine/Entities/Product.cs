@@ -1,4 +1,5 @@
 ﻿using Catalogue.Domaine.Entities.ValueObjects;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.RegularExpressions;
 
 namespace Catalogue.Domaine.Entities
@@ -8,6 +9,7 @@ namespace Catalogue.Domaine.Entities
         public Guid Id { get; private set; }
         public Guid CompanyId { get; private set; }
         public string Name { get; private set; } = string.Empty;
+        [ForeignKey(nameof(CompanyId))]
         public Company Company { get; set; }
         private readonly List<ProductVariant> _variants = new();
         // This syntax is an explisite {get => return _variants;}

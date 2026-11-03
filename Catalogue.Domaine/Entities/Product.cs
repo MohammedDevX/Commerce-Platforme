@@ -1,6 +1,4 @@
 ﻿using Catalogue.Domaine.Entities.ValueObjects;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Text.RegularExpressions;
 
 namespace Catalogue.Domaine.Entities
 {

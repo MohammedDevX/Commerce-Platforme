@@ -29,8 +29,7 @@ namespace Catalogue.Infrastructure.Persistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     CompanyId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
-                    CompanyId1 = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -41,11 +40,6 @@ namespace Catalogue.Infrastructure.Persistence.Migrations
                         principalTable: "Companies",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_Products_Companies_CompanyId1",
-                        column: x => x.CompanyId1,
-                        principalTable: "Companies",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -72,11 +66,6 @@ namespace Catalogue.Infrastructure.Persistence.Migrations
                 name: "IX_Products_CompanyId",
                 table: "Products",
                 column: "CompanyId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Products_CompanyId1",
-                table: "Products",
-                column: "CompanyId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductVariants_ProductId",

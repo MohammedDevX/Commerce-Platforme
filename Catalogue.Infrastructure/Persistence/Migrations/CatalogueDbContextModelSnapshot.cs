@@ -47,9 +47,6 @@ namespace Catalogue.Infrastructure.Persistence.Migrations
                     b.Property<Guid>("CompanyId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("CompanyId1")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(150)
@@ -58,8 +55,6 @@ namespace Catalogue.Infrastructure.Persistence.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("CompanyId1");
 
                     b.ToTable("Products");
                 });
@@ -91,14 +86,10 @@ namespace Catalogue.Infrastructure.Persistence.Migrations
             modelBuilder.Entity("Catalogue.Domaine.Entities.Product", b =>
                 {
                     b.HasOne("Catalogue.Domaine.Entities.Company", "Company")
-                        .WithMany()
+                        .WithMany("Products")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("Catalogue.Domaine.Entities.Company", null)
-                        .WithMany("Products")
-                        .HasForeignKey("CompanyId1");
 
                     b.Navigation("Company");
                 });

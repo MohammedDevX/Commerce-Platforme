@@ -12,7 +12,7 @@ namespace Catalogue.Infrastructure.Configurations
             builder.Property(p => p.Name).HasMaxLength(150).IsRequired();
             builder.Property(p => p.CompanyId).IsRequired();
             builder.HasOne(p => p.Company)
-                .WithMany()
+                .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CompanyId)
                 // Cannot delete Company who contain Products
                 .OnDelete(deleteBehavior: DeleteBehavior.Restrict);

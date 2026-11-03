@@ -1,5 +1,0 @@
-{
-  "ConnectionStrings": {
-    "catalogueConnectionString": "Server=localhost;Database=Catalogue_IntegrationTests;User Id=sa;Password=Your_password123!;TrustServerCertificate=True;"
-  }
-}

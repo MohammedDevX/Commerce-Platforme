@@ -3,6 +3,6 @@
     public interface IProductVariantRepository
     {
         // Get productVariants with Sku 
-        public Task<bool> ExistsSkuForCompanyAsync(string sku, Guid companyId, CancellationToken ct);
+        public Task<bool> ExistsSkuForProductAsync(string sku, Guid productId, CancellationToken ct);
     }
 }

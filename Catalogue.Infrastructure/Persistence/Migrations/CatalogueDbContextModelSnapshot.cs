@@ -79,9 +79,7 @@ namespace Catalogue.Infrastructure.Persistence.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProductId");
-
-                    b.HasIndex("SKU", "ProductId")
+                    b.HasIndex("ProductId", "SKU")
                         .IsUnique();
 
                     b.ToTable("ProductVariants");

@@ -1,17 +1,29 @@
-﻿namespace Catalogue.Tests.Infrastructure
+﻿using Catalogue.Domaine.Entities;
+using Catalogue.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+
+namespace Catalogue.Tests.Infrastructure
 {
     public class ProductVariantRepositoryTest
     {
-        //private readonly IProdu
-        //public ProductVariantRepositoryTest()
-        //{
-            
-        //}
+        // This method create CatalogueDbContext object each time is called
+        // Note : It use test env connection string 
+        private CatalogueDbContext CreateDbContext()
+        {
+            var configuration = new ConfigurationBuilder()
+                .SetBasePath(Directory.GetCurrentDirectory())
+                .AddJsonFile("appsetting.Test.json")
+                .Build();
 
-        //[Fact]
-        //public async Task<bool> ProductVariant_Sku_Exists_Test()
-        //{
-            
-        //}
+            string connectionString = configuration.GetConnectionString("catalogueConnectionString")!;
+
+            var options = new DbContextOptionsBuilder<CatalogueDbContext>()
+             .UseSqlServer(connectionString)
+                .Options;
+
+            return new CatalogueDbContext(options);
+        }
     }
 }

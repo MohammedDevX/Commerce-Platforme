@@ -8,7 +8,7 @@ namespace Catalogue.Infrastructure.Persistence.Repositories
     {
         private readonly CatalogueDbContext _context;
 
-        public ProductVariantRepository(CatalogueDbContext context, ICompanyRepository companyRepository)
+        public ProductVariantRepository(CatalogueDbContext context)
         {
             _context = context;
         }

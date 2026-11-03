@@ -10,11 +10,12 @@ namespace Catalogue.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<ProductVariant> builder)
         {
             builder.HasKey(v => v.Id);
+            builder.HasIndex(v => new { v.SKU, v.ProductId }).IsUnique(); 
             // Here we have Sku as Value object so EF cannot map it automaticly, so we use this method 
             // .HasConversion(1) sku => sku.Sku, 2) value => new Sku(value));
             // 1) Is how Ef map the data from Object to DB (create)
             // 2) Is how Ef map from DB to Object (read)
-            builder.Property(v => v.SKU).IsRequired()
+            builder.Property(v => v.SKU).IsRequired().HasMaxLength(50)
                 .HasConversion(sku => sku.SKU, skuValue => new Sku(skuValue));
             builder.Property(v => v.Price).IsRequired()
                 .HasPrecision(18, 2).

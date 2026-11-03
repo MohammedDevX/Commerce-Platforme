@@ -74,11 +74,15 @@ namespace Catalogue.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("SKU")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("SKU", "ProductId")
+                        .IsUnique();
 
                     b.ToTable("ProductVariants");
                 });

@@ -1,4 +1,6 @@
+using Catalogue.Application.Common.Abstractions.Persistence;
 using Catalogue.Infrastructure.Persistence;
+using Catalogue.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -13,6 +15,9 @@ builder.Services.AddDbContext<CatalogueDbContext>(opt =>
 {
     opt.UseSqlServer(builder.Configuration.GetConnectionString("catalogueConnectionString"));
 });
+
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
 
 var app = builder.Build();
 

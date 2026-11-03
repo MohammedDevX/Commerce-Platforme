@@ -1,8 +1,6 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
-using Catalogue.Application.Common.Exceptions;
+using Catalogue.Domaine.Entities.ValueObjects;
 using Microsoft.EntityFrameworkCore;
-using System.Drawing.Printing;
-using System.Runtime.InteropServices;
 
 namespace Catalogue.Infrastructure.Persistence.Repositories
 {
@@ -17,14 +15,8 @@ namespace Catalogue.Infrastructure.Persistence.Repositories
 
         public async Task<bool> ExistsSkuForProductAsync(string sku, Guid productId, CancellationToken ct)
         {
-            var product = await _context.Products.Where(c => c.Id == productId).FirstOrDefaultAsync(ct); // ?? Should throw exception here ?
-
-            if (product.ProductVariants.Any(v => v.SKU.SKU == sku))
-            {
-                return true;
-            }
-
-            return false;
+            return await _context.ProductVariants.
+                Where(v => v.ProductId == productId && v.SKU == new Sku(sku)).AnyAsync(ct);
         }
     }
 }

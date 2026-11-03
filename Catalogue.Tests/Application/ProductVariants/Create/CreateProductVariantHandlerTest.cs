@@ -28,7 +28,7 @@ namespace Catalogue.Tests.Application.ProductVariants.Create
             CreateProductVariantCommand command = new(product.Id, price.Price, sku.SKU);
 
             _productRepository.Setup(p => p.GetProductByIdAsync(product.Id, It.IsAny<CancellationToken>())).ReturnsAsync(product);
-            _productVariantRepository.Setup(v => v.ExistsSkuForCompanyAsync(sku.SKU, company.Id, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+            _productVariantRepository.Setup(v => v.ExistsSkuForProductAsync(sku.SKU, product.Id, It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
             await _handler.Handle(command, CancellationToken.None);
 
@@ -48,7 +48,7 @@ namespace Catalogue.Tests.Application.ProductVariants.Create
             CreateProductVariantCommand command = new(Guid.NewGuid(), price.Price, sku.SKU);
 
             _productRepository.Setup(p => p.GetProductByIdAsync(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync((Product?)null);
-            _productVariantRepository.Setup(v => v.ExistsSkuForCompanyAsync(sku.SKU, company.Id, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+            _productVariantRepository.Setup(v => v.ExistsSkuForProductAsync(sku.SKU, Guid.Empty, It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
             await Assert.ThrowsAsync<NotFoundException>(() => _handler.Handle(command, CancellationToken.None));
             _unitOfWork.Verify(u => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
@@ -64,7 +64,7 @@ namespace Catalogue.Tests.Application.ProductVariants.Create
             CreateProductVariantCommand command = new(product.Id, price.Price, sku.SKU);
 
             _productRepository.Setup(p => p.GetProductByIdAsync(product.Id, It.IsAny<CancellationToken>())).ReturnsAsync(product);
-            _productVariantRepository.Setup(v => v.ExistsSkuForCompanyAsync(sku.SKU, company.Id, It.IsAny<CancellationToken>())).ReturnsAsync(true);
+            _productVariantRepository.Setup(v => v.ExistsSkuForProductAsync(sku.SKU, product.Id, It.IsAny<CancellationToken>())).ReturnsAsync(true);
 
             await Assert.ThrowsAsync<ConflictException>(() => _handler.Handle(command, CancellationToken.None));
             Assert.Empty(product.ProductVariants);
@@ -80,7 +80,7 @@ namespace Catalogue.Tests.Application.ProductVariants.Create
             CreateProductVariantCommand command = new(product.Id, -150m, sku.SKU);
 
             _productRepository.Setup(p => p.GetProductByIdAsync(product.Id, It.IsAny<CancellationToken>())).ReturnsAsync(product);
-            _productVariantRepository.Setup(v => v.ExistsSkuForCompanyAsync(sku.SKU, company.Id, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+            _productVariantRepository.Setup(v => v.ExistsSkuForProductAsync(sku.SKU, product.Id, It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
             await Assert.ThrowsAsync<ArgumentException>(() => _handler.Handle(command, CancellationToken.None));
             Assert.Empty(product.ProductVariants);
@@ -97,7 +97,7 @@ namespace Catalogue.Tests.Application.ProductVariants.Create
             CreateProductVariantCommand command = new(product.Id, price.Price, sku);
 
             _productRepository.Setup(p => p.GetProductByIdAsync(product.Id, It.IsAny<CancellationToken>())).ReturnsAsync(product);
-            _productVariantRepository.Setup(v => v.ExistsSkuForCompanyAsync(sku, company.Id, It.IsAny<CancellationToken>())).ReturnsAsync(false);
+            _productVariantRepository.Setup(v => v.ExistsSkuForProductAsync(sku, product.Id, It.IsAny<CancellationToken>())).ReturnsAsync(false);
 
             await Assert.ThrowsAsync<ArgumentException>(() => _handler.Handle(command, CancellationToken.None));
             Assert.Empty(product.ProductVariants);

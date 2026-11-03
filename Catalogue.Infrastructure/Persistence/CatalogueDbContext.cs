@@ -1,4 +1,5 @@
-﻿using Catalogue.Domaine.Entities;
+﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Domaine.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System;

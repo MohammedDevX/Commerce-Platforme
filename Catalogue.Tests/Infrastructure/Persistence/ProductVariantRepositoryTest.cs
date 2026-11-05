@@ -6,13 +6,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Xunit.Sdk;
 
-namespace Catalogue.Tests.Infrastructure
+namespace Catalogue.Tests.Infrastructure.Fixtures.Persistence
 {
     public class ProductVariantRepositoryTest
     {
 
-        // This method create CatalogueDbContext object each time is called
-        // Note : It use test env connection string 
+        /// <summary>
+        /// This method create CatalogueDbContext object each time is called
+        /// Note : It use test env connection string 
+        /// </summary>
+
         private CatalogueDbContext CreateDbContext()
         {
             var configuration = new ConfigurationBuilder()
@@ -59,6 +62,7 @@ namespace Catalogue.Tests.Infrastructure
         {
             CancellationToken ct = CancellationToken.None;
             using var context = CreateDbContext();
+            await context.Database.MigrateAsync(ct);
             var company = new Company("Logitech");
             var product = new Product(company.Id, "Logitech Z-1000");
             var sku = new Sku("Logitech-Z-1000");
@@ -80,6 +84,7 @@ namespace Catalogue.Tests.Infrastructure
         {
             CancellationToken ct = CancellationToken.None;
             using var context = CreateDbContext();
+            await context.Database.MigrateAsync(ct);
             var company = new Company("Logitech");
             var product = new Product(company.Id, "Logitech Z-1000 mouse");
             var product2 = new Product(company.Id, "Logitech12 keyboard");
@@ -89,7 +94,8 @@ namespace Catalogue.Tests.Infrastructure
             product.AddProductVariant(money, sku);
             context.Companies.Add(company);
             context.Products.Add(product);
-            await context.SaveChangesAsync();
+            context.Products.Add(product2);
+            await context.SaveChangesAsync(ct);
 
             using var context2 = CreateDbContext();
             ProductVariantRepository productVariantRepository = new(context2);

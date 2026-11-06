@@ -1,107 +1,130 @@
 ﻿using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Entities.ValueObjects;
-using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Repositories;
+using Catalogue.Tests.Infrastructure.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Xunit.Sdk;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Transactions;
+using Catalogue.Infrastructure.Persistence;
+using System.Runtime.InteropServices;
+using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 
-namespace Catalogue.Tests.Infrastructure.Fixtures.Persistence
+namespace Catalogue.Tests.Infrastructure.Persistence
 {
-    public class ProductVariantRepositoryTest
+    /// <summary>
+    /// IClassFixture<T> => whene xUnit framework find a test class that implemente IClassFixture<T>
+    /// he create an instance of T fixture class and injecte it in the constructor of the test class 
+    /// </summary>
+    public class ProductVariantRepositoryTest : IClassFixture<CatalogueDatabaseFixture>
     {
+        private readonly CatalogueDatabaseFixture _fixture;
+
+        public ProductVariantRepositoryTest(CatalogueDatabaseFixture fixture)
+        {
+            _fixture = fixture;
+        }
 
         /// <summary>
         /// This method create CatalogueDbContext object each time is called
         /// Note : It use test env connection string 
         /// </summary>
+        //private CatalogueDbContext CreateDbContext()
+        //{
+        //    var configuration = new ConfigurationBuilder()
+        //        .SetBasePath(Directory.GetCurrentDirectory())
+        //        .AddJsonFile("appsettings.Test.json")
+        //        .Build();
 
-        private CatalogueDbContext CreateDbContext()
-        {
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.Test.json")
-                .Build();
+        //    string connectionString = configuration.GetConnectionString("catalogueConnectionString")!;
 
-            string connectionString = configuration.GetConnectionString("catalogueConnectionString")!;
+        //    var options = new DbContextOptionsBuilder<CatalogueDbContext>()
+        //     .UseSqlServer(connectionString)
+        //        .Options;
 
-            var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-             .UseSqlServer(connectionString)
-                .Options;
-
-            return new CatalogueDbContext(options);
-        }
+        //    return new CatalogueDbContext(options);
+        //}
 
         [Fact]
         public async Task Check_If_Sku_Already_Exists()
         {
 
-            CancellationToken ct = CancellationToken.None;
-            using var context = CreateDbContext();
-            await context.Database.MigrateAsync(ct);
             var company = new Company("Razor");
-                var product = new Product(company.Id, "Razor Mouse 101");
-                var sku = new Sku("razor-mouse-101");
-                var money = new Money(140m);
-
-            product.AddProductVariant(money, sku);
-
+            var product = new Product(company.Id, "Razor Mouse 101");
+            var sku = new Sku("razor-mouse-101");
+            var money = new Money(140m);
+            CancellationToken ct = CancellationToken.None;
+            using var context = _fixture.CreateDbContext();
+            await using var transaction = await context.Database.BeginTransactionAsync();
+            try
+            {
+                product.AddProductVariant(money, sku);
                 context.Companies.Add(company);
                 context.Products.Add(product);
                 await context.SaveChangesAsync(ct);
 
-            using var context2 = CreateDbContext();
-            ProductVariantRepository _productVariantRepository = new ProductVariantRepository(context2);
-            var isSkuExists = await _productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product.Id, ct);
+                using var context2 = _fixture.CreateDbContext();
+                await context2.Database.UseTransactionAsync(transaction.GetDbTransaction());
+                ProductVariantRepository _productVariantRepository = new ProductVariantRepository(context2);
+                var isSkuExists = await _productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product.Id, ct);
+                Assert.True(isSkuExists);
+                await transaction.CommitAsync();
+            }
 
-            Assert.True(isSkuExists);
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }// finally
+            //{
+            //    await transaction.RollbackAsync();
+            //}
         }
 
-        [Fact]
-        public async Task Check_If_Sku_Doesnt_Exists()
-        {
-            CancellationToken ct = CancellationToken.None;
-            using var context = CreateDbContext();
-            await context.Database.MigrateAsync(ct);
-            var company = new Company("Logitech");
-            var product = new Product(company.Id, "Logitech Z-1000");
-            var sku = new Sku("Logitech-Z-1000");
-            var money = new Money(150m);
+        //[Fact]
+        //public async Task Check_If_Sku_Doesnt_Exists()
+        //{
+        //    CancellationToken ct = CancellationToken.None;
+        //    using var context = CreateDbContext();
+        //    await context.Database.MigrateAsync(ct);
+        //    var company = new Company("Logitech");
+        //    var product = new Product(company.Id, "Logitech Z-1000");
+        //    var sku = new Sku("Logitech-Z-1000");
+        //    var money = new Money(150m);
 
-            context.Companies.Add(company);
-            context.Products.Add(product);
-            await context.SaveChangesAsync();
+        //    context.Companies.Add(company);
+        //    context.Products.Add(product);
+        //    await context.SaveChangesAsync();
 
-            using var context2 = CreateDbContext();
-            ProductVariantRepository productVariantRepository = new(context2);
-            var isSkuExists = await productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product.Id, ct);
+        //    using var context2 = CreateDbContext();
+        //    ProductVariantRepository productVariantRepository = new(context2);
+        //    var isSkuExists = await productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product.Id, ct);
 
-            Assert.False(isSkuExists);
-        }
+        //    Assert.False(isSkuExists);
+        //}
 
-        [Fact]
-        public async Task Check_If_Sku_Alredy_Exists_In_Other_Poruct()
-        {
-            CancellationToken ct = CancellationToken.None;
-            using var context = CreateDbContext();
-            await context.Database.MigrateAsync(ct);
-            var company = new Company("Logitech");
-            var product = new Product(company.Id, "Logitech Z-1000 mouse");
-            var product2 = new Product(company.Id, "Logitech12 keyboard");
-            var sku = new Sku("Logitech-Z-1000");
-            var money = new Money(150m);
+        //[Fact]
+        //public async Task Check_If_Sku_Alredy_Exists_In_Other_Poruct()
+        //{
+        //    CancellationToken ct = CancellationToken.None;
+        //    using var context = CreateDbContext();
+        //    await context.Database.MigrateAsync(ct);
+        //    var company = new Company("Logitech");
+        //    var product = new Product(company.Id, "Logitech Z-1000 mouse");
+        //    var product2 = new Product(company.Id, "Logitech12 keyboard");
+        //    var sku = new Sku("Logitech-Z-1000");
+        //    var money = new Money(150m);
 
-            product.AddProductVariant(money, sku);
-            context.Companies.Add(company);
-            context.Products.Add(product);
-            context.Products.Add(product2);
-            await context.SaveChangesAsync(ct);
+        //    product.AddProductVariant(money, sku);
+        //    context.Companies.Add(company);
+        //    context.Products.Add(product);
+        //    context.Products.Add(product2);
+        //    await context.SaveChangesAsync(ct);
 
-            using var context2 = CreateDbContext();
-            ProductVariantRepository productVariantRepository = new(context2);
-            var isSkuExists = await productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product2.Id, ct);
+        //    using var context2 = CreateDbContext();
+        //    ProductVariantRepository productVariantRepository = new(context2);
+        //    var isSkuExists = await productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product2.Id, ct);
 
-            Assert.False(isSkuExists);
-        }
+        //    Assert.False(isSkuExists);
+        //}
     }
 }

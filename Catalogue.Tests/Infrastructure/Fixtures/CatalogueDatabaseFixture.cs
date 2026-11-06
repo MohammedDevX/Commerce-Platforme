@@ -20,38 +20,34 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
     /// </summary>
     public class CatalogueDatabaseFixture : IAsyncLifetime
     {
-        private CatalogueDbContext context;
-        private IDbContextTransaction transaction;
+        private readonly string _connectionString;
 
-    public CatalogueDatabaseFixture()
-        {
-            context = CreateDbContext();   
-        }
-
-        public async Task DisposeAsync()
-        {
-            
-        }
-
-        public async Task InitializeAsync()
-        {
-            CancellationToken ct = CancellationToken.None;
-            var context = CreateDbContext();
-            await context.Database.MigrateAsync(ct);
-            transaction = await context.Database.BeginTransactionAsync();
-        }
-
-        public CatalogueDbContext CreateDbContext()
+        public CatalogueDatabaseFixture()
         {
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.Test.json")
                 .Build();
 
-            string connectionString = configuration.GetConnectionString("catalogueConnectionString")!;
+            _connectionString = configuration.GetConnectionString("catalogueConnectionString")
+                ?? throw new InvalidOperationException("ConnectionString configuration not found");
+        }
 
+        public async Task DisposeAsync()
+        {
+            await Task.CompletedTask;
+        }
+
+        public async Task InitializeAsync()
+        {
+            using var context = CreateDbContext();
+            await context.Database.MigrateAsync();
+        }
+
+        public CatalogueDbContext CreateDbContext()
+        {
             var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-             .UseSqlServer(connectionString)
+             .UseSqlServer(_connectionString)
                 .Options;
 
             return new CatalogueDbContext(options);

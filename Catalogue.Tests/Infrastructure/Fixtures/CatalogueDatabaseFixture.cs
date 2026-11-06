@@ -40,7 +40,7 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
 
         public async Task InitializeAsync()
         {
-            using var context = CreateDbContext();
+            await using var context = CreateDbContext();
             await context.Database.MigrateAsync();
         }
 

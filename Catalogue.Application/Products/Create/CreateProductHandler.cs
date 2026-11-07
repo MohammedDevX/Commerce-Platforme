@@ -1,0 +1,35 @@
+﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Application.Common.Exceptions;
+using Catalogue.Domaine.Entities;
+
+namespace Catalogue.Application.Products.Create
+{
+    public class CreateProductHandler
+    {
+        private readonly ICompanyRepository _companyRepository;
+        private readonly IProductRepository _productRepository;
+        private readonly IUnitOfWork _unitOfWork;
+
+        public CreateProductHandler(ICompanyRepository companyRepository, 
+            IProductRepository productRepository,
+            IUnitOfWork unitOfWork)
+        {
+            _companyRepository = companyRepository;
+            _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task Handle(CreateProductCommand commande, CancellationToken ct)
+        {
+            var isCompnyExists = await _companyRepository.IsExists(commande.companyId, ct);
+            if (isCompnyExists == false)
+                throw new NotFoundException(nameof(Company), commande.companyId);
+
+            //var isProductAlreadyExists = await _productRepository.GetProductByIdAsync(, ct); does i need to check if there is product with the same name in the company ?
+
+            var product = new Product(commande.companyId, commande.name);
+
+            await _unitOfWork.SaveChangesAsync(ct);
+        }
+    }
+}

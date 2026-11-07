@@ -10,7 +10,7 @@ using Catalogue.Infrastructure.Persistence;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 
-namespace Catalogue.Tests.Infrastructure.Persistence
+namespace Catalogue.Tests.Infrastructure.Persistence.Repositories
 {
     /// <summary>
     /// IClassFixture<T> => whene xUnit framework find a test class that implemente IClassFixture<T>

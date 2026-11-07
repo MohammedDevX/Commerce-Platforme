@@ -10,6 +10,7 @@ namespace Catalogue.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<ProductVariant> builder)
         {
             builder.HasKey(v => v.Id);
+            builder.Property(v => v.Id).ValueGeneratedNever();
             builder.HasIndex(v => new { v.ProductId, v.SKU }).IsUnique(); 
             // Here we have Sku as Value object so EF cannot map it automaticly, so we use this method 
             // .HasConversion(1) sku => sku.Sku, 2) value => new Sku(value));

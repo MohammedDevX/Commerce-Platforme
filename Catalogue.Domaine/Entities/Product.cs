@@ -14,7 +14,7 @@ namespace Catalogue.Domaine.Entities
          * And .AsReadOnly() wrap the original collection into ReadOnlyCollection so if someone outside of
          * the class try to modify in the collection an InvalidCastException is thrown
          */
-        public IReadOnlyCollection<ProductVariant> ProductVariants => _variants.AsReadOnly();
+        public IReadOnlyCollection<ProductVariant> ProductVariants => _variants;//.AsReadOnly();
 
         private Product()
         {

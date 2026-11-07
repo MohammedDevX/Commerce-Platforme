@@ -5,5 +5,6 @@ namespace Catalogue.Application.Common.Abstractions.Persistence
     public interface IProductRepository
     {
         public Task<Product?> GetProductByIdAsync(Guid productId, CancellationToken ct);
+        public void Add(Product product);
     }
 }

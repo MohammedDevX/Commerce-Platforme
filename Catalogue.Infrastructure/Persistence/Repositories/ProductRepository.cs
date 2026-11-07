@@ -17,6 +17,11 @@ namespace Catalogue.Infrastructure.Persistence.Repositories
             _context = context;
         }
 
+        public void Add(Product product)
+        {
+            _context.Products.Add(product);
+        }
+
         public async Task<Product?> GetProductByIdAsync(Guid productId, CancellationToken ct)
         {
             return await _context.Products.Where(p => p.Id == productId).FirstOrDefaultAsync(ct);

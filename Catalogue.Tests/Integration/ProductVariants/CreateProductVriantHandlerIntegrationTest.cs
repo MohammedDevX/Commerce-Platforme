@@ -10,7 +10,7 @@ using Catalogue.Tests.Infrastructure.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Catalogue.Tests.Integration
+namespace Catalogue.Tests.Integration.ProductVariants
 {
     public class CreateProductVriantHandlerIntegrationTest : IClassFixture<CatalogueDatabaseFixture>
     {

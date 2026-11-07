@@ -21,14 +21,12 @@ namespace Catalogue.Application.Products.Create
 
         public async Task Handle(CreateProductCommand commande, CancellationToken ct)
         {
-            var isCompnyExists = await _companyRepository.IsExists(commande.companyId, ct);
+            var isCompnyExists = await _companyRepository.ExistsAsync(commande.companyId, ct);
             if (isCompnyExists == false)
                 throw new NotFoundException(nameof(Company), commande.companyId);
 
-            //var isProductAlreadyExists = await _productRepository.GetProductByIdAsync(, ct); does i need to check if there is product with the same name in the company ?
-
             var product = new Product(commande.companyId, commande.name);
-
+            _productRepository.Add(product);
             await _unitOfWork.SaveChangesAsync(ct);
         }
     }

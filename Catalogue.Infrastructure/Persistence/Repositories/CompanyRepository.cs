@@ -17,7 +17,7 @@ namespace Catalogue.Infrastructure.Persistence.Repositories
             return await _context.Companies.FirstOrDefaultAsync(c => c.Id == companyId, ct);
         }
 
-        public async Task<bool> IsExists(Guid companyId, CancellationToken ct)
+        public async Task<bool> ExistsAsync(Guid companyId, CancellationToken ct)
         {
             return await _context.Companies.AnyAsync(c => c.Id == companyId, ct);
         }

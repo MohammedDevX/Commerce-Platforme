@@ -25,30 +25,14 @@ namespace Catalogue.Tests.Infrastructure.Persistence
             _fixture = fixture;
         }
 
-        /// <summary>
-        /// This method create CatalogueDbContext object each time is called
-        /// Note : It use test env connection string 
-        /// </summary>
-        //private CatalogueDbContext CreateDbContext()
-        //{
-        //    var configuration = new ConfigurationBuilder()
-        //        .SetBasePath(Directory.GetCurrentDirectory())
-        //        .AddJsonFile("appsettings.Test.json")
-        //        .Build();
-
-        //    string connectionString = configuration.GetConnectionString("catalogueConnectionString")!;
-
-        //    var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-        //     .UseSqlServer(connectionString)
-        //        .Options;
-
-        //    return new CatalogueDbContext(options);
-        //}
-
+        /*
+            Note : If the work flow reaches RollbackAsync() so the rollback is triggred, but if the 
+            work flow end with throwing an exception before reaches RollbackAsync() so here, because 
+            of using {} block if there is no Commit() so Dispose() is going to trigger a Rollback
+         */
         [Fact]
         public async Task Check_If_Sku_Already_Exists()
         {
-
             var company = new Company("Razor");
             var product = new Product(company.Id, "Razor Mouse 101");
             var sku = new Sku("razor-mouse-101");
@@ -57,17 +41,14 @@ namespace Catalogue.Tests.Infrastructure.Persistence
 
             await using var context = _fixture.CreateDbContext();
             await using var transaction = await context.Database.BeginTransactionAsync();
-                product.AddProductVariant(money, sku);
-                context.Companies.Add(company);
-                context.Products.Add(product);
-                await context.SaveChangesAsync(ct);
-
-                //await using var context2 = _fixture.CreateDbContext();
-                //await context2.Database.UseTransactionAsync(transaction.GetDbTransaction(), ct);
-                ProductVariantRepository _productVariantRepository = new ProductVariantRepository(context);
-                var isSkuExists = await _productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product.Id, ct);
-                Assert.True(isSkuExists);
-                await transaction.RollbackAsync(ct);
+            product.AddProductVariant(money, sku);
+            context.Companies.Add(company);
+            context.Products.Add(product);
+            await context.SaveChangesAsync(ct);
+            ProductVariantRepository _productVariantRepository = new ProductVariantRepository(context);
+            var isSkuExists = await _productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product.Id, ct);
+            Assert.True(isSkuExists);
+            await transaction.RollbackAsync(ct);
         }
 
         [Fact]
@@ -85,7 +66,6 @@ namespace Catalogue.Tests.Infrastructure.Persistence
             context.Products.Add(product);
             await context.SaveChangesAsync();
 
-            //await using var context2 = _fixture.CreateDbContext();
             ProductVariantRepository productVariantRepository = new(context);
             var isSkuExists = await productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product.Id, ct);
 
@@ -113,7 +93,6 @@ namespace Catalogue.Tests.Infrastructure.Persistence
             context.Products.Add(product2);
             await context.SaveChangesAsync(ct);
 
-            //using var context2 = CreateDbContext();
             ProductVariantRepository productVariantRepository = new(context);
             var isSkuExists = await productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product2.Id, ct);
 

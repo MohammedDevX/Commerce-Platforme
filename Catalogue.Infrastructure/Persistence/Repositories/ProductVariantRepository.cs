@@ -15,7 +15,7 @@ namespace Catalogue.Infrastructure.Persistence.Repositories
 
         public async Task<bool> ExistsSkuForProductAsync(string sku, Guid productId, CancellationToken ct)
         {
-            return await _context.ProductVariants.
+            return await _context.ProductVariants.AsNoTracking().
                 Where(v => v.ProductId == productId && v.SKU == new Sku(sku)).AnyAsync(ct);
         }
     }

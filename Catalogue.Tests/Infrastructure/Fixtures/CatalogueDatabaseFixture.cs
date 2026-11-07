@@ -44,6 +44,10 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
             await context.Database.MigrateAsync();
         }
 
+        /// <summary>
+        /// This method create CatalogueDbContext object each time is called
+        /// Note : It use test env connection string 
+        /// </summary>
         public CatalogueDbContext CreateDbContext()
         {
             var options = new DbContextOptionsBuilder<CatalogueDbContext>()

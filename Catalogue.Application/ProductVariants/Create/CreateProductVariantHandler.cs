@@ -19,11 +19,17 @@ namespace Catalogue.Application.ProductVariants.Create
             Money price = new Money(command.Price);
             Sku sku = new Sku(command.Sku);
 
-            var product = await _productRepository.GetProductByIdAsync(command.ProductId, ct) ?? throw new NotFoundException(nameof(Product), command.ProductId);
+            // Here we fetched the product from DB without using AsNoTracking() because the product should 
+            // be tracked because he is the responsible of adding the variant in DB
+            var product = await _productRepository.GetProductByIdAsync(command.ProductId, ct) 
+                ?? throw new NotFoundException(nameof(Product), command.ProductId);
 
-            var variantExisting = await _productVariantRepository.ExistsSkuForProductAsync(sku.SKU, product.Id, ct);
+            var variantExisting = await _productVariantRepository.
+                ExistsSkuForProductAsync(sku.SKU, product.Id, ct);
+
             if (variantExisting)
-                throw new ConflictException($"Variant with SKU {command.Sku} already existe in product with id {product.Id}");
+                throw new ConflictException
+                    ($"Variant with SKU {command.Sku} already existe in product with id {product.Id}");
 
             product.AddProductVariant(price, sku);
 

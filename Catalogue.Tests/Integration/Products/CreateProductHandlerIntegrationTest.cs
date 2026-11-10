@@ -45,7 +45,7 @@ namespace Catalogue.Tests.Integration.Products
 
             var options = new DbContextOptionsBuilder<CatalogueDbContext>()
                 .UseSqlServer(context.Database.GetDbConnection()).Options;
-            var context2 = new CatalogueDbContext(options);
+            await using var context2 = new CatalogueDbContext(options);
             await context2.Database.UseTransactionAsync(transaction.GetDbTransaction());
 
             var product = await context2.Products.FirstOrDefaultAsync(p => p.CompanyId == company.Id);
@@ -53,7 +53,7 @@ namespace Catalogue.Tests.Integration.Products
             Assert.NotNull(product);
             Assert.Equal(productName, product.Name);
 
-            await transaction.CommitAsync(ct);
+            await transaction.RollbackAsync(ct);
         }
 
         [Fact]

@@ -19,7 +19,7 @@ namespace Catalogue.Infrastructure.Persistence.Repositories
 
         public async Task<bool> ExistsAsync(Guid companyId, CancellationToken ct)
         {
-            return await _context.Companies.AnyAsync(c => c.Id == companyId, ct);
+            return await _context.Companies.AsNoTracking().AnyAsync(c => c.Id == companyId, ct);
         }
     }
 }

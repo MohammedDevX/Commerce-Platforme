@@ -1,7 +1,6 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
 using Catalogue.Application.Common.Exceptions;
 using Catalogue.Application.Products.Activate;
-using Catalogue.Application.Products.Desactivate;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Enums;
 using Moq;
@@ -50,7 +49,7 @@ namespace Catalogue.Tests.Application.Products.Activate
             await Assert.ThrowsAsync<NotFoundException>(
                 () => _activateProductHandler.Handle(command, CancellationToken.None));
 
-            Assert.Equal(ProductStatus.Desactivate, product.Status);
+            Assert.Equal(ProductStatus.Inactivate, product.Status);
 
             _unitOfWork.Verify((u) => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }

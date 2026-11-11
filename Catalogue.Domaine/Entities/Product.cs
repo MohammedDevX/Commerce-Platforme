@@ -67,7 +67,7 @@ namespace Catalogue.Domaine.Entities
         public void AddProductVariant(Money price, Sku sku)
         {
             if (Status is ProductStatus.Inactivate)
-                return;
+                throw new InvalidOperationException("Cannot add variant to an inactive product");
 
             ProductVariant productVariant = new(Id, price, sku);
             _variants.Add(productVariant);

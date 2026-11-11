@@ -62,7 +62,7 @@ namespace Catalogue.Tests.Domaine.Entities
             Product product = new(Guid.NewGuid(), "Razor Mouse");
             product.DesactivateProduct();
 
-            Assert.Equal(ProductStatus.Desactivate, product.Status);
+            Assert.Equal(ProductStatus.Inactivate, product.Status);
         }
 
         [Fact]

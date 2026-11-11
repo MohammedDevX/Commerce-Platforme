@@ -33,7 +33,7 @@ namespace Catalogue.Tests.Application.Products.Desactivate
 
             await _desactivateProductHandler.Handle(command, CancellationToken.None);
 
-            Assert.Equal(ProductStatus.Desactivate, product.Status);
+            Assert.Equal(ProductStatus.Inactivate, product.Status);
 
             _unitOfWork.Verify((u) => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }

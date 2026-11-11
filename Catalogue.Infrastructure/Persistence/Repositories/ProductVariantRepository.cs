@@ -1,4 +1,4 @@
-﻿using Catalogue.Application.Common.Abstractions.Persistence;
+﻿using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Domaine.Entities.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 

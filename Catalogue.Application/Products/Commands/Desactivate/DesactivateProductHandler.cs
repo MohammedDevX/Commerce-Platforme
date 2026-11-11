@@ -1,8 +1,9 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Exceptions;
 using Catalogue.Domaine.Entities;
 
-namespace Catalogue.Application.Products.Desactivate
+namespace Catalogue.Application.Products.Commands.Desactivate
 {
     public class DesactivateProductHandler
     {

@@ -1,6 +1,7 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Exceptions;
-using Catalogue.Application.Products.Create;
+using Catalogue.Application.Products.Commands.Create;
 using Catalogue.Domaine.Entities;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Moq;

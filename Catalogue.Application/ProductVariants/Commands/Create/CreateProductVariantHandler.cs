@@ -1,9 +1,10 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Exceptions;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Entities.ValueObjects;
 
-namespace Catalogue.Application.ProductVariants.Create
+namespace Catalogue.Application.ProductVariants.Commands.Create
 {
     public class CreateProductVariantHandler(
         IProductRepository productRepositiry, 

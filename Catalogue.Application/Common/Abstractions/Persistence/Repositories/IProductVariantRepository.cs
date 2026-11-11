@@ -1,4 +1,4 @@
-﻿namespace Catalogue.Application.Common.Abstractions.Persistence
+﻿namespace Catalogue.Application.Common.Abstractions.Persistence.Repositories
 {
     public interface IProductVariantRepository
     {

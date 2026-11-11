@@ -1,6 +1,6 @@
 ﻿using Catalogue.Domaine.Entities;
 
-namespace Catalogue.Application.Common.Abstractions.Persistence
+namespace Catalogue.Application.Common.Abstractions.Persistence.Repositories
 {
     public interface IProductRepository
     {

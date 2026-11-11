@@ -1,6 +1,7 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Exceptions;
-using Catalogue.Application.ProductVariants.Create;
+using Catalogue.Application.ProductVariants.Commands.Create;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Entities.ValueObjects;
 using Moq;

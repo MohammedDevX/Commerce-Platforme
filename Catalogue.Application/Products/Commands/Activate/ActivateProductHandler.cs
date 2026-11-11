@@ -1,26 +1,28 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Exceptions;
+using Catalogue.Application.Products.Desactivate;
 using Catalogue.Domaine.Entities;
 
-namespace Catalogue.Application.Products.Update
+namespace Catalogue.Application.Products.Commands.Activate
 {
-    public class UpdateProductHandler
+    public class ActivateProductHandler
     {
         private readonly IProductRepository _productRepository;
         private readonly IUnitOfWork _unitOfWork;
 
-        public UpdateProductHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
+        public ActivateProductHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
         {
             _productRepository = productRepository;
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Handle(UpdateProductCommand command, CancellationToken ct)
+        public async Task Handle(ActivateProductCommand command, CancellationToken ct)
         {
-            var product = await _productRepository.GetProductByIdAsync(command.Id, ct) 
+            var product = await _productRepository.GetProductByIdAsync(command.Id, ct)
                 ?? throw new NotFoundException(nameof(Product), command.Id);
 
-            product.Rename(command.Name);
+            product.ActivateProduct();
 
             await _unitOfWork.SaveChangesAsync(ct);
         }

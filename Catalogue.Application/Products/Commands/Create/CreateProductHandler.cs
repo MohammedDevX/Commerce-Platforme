@@ -1,8 +1,9 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Exceptions;
 using Catalogue.Domaine.Entities;
 
-namespace Catalogue.Application.Products.Create
+namespace Catalogue.Application.Products.Commands.Create
 {
     public class CreateProductHandler
     {

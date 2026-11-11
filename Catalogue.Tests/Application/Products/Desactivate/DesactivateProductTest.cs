@@ -1,6 +1,7 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Exceptions;
-using Catalogue.Application.Products.Desactivate;
+using Catalogue.Application.Products.Commands.Desactivate;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Enums;
 using Moq;

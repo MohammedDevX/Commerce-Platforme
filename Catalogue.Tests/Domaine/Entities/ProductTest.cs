@@ -1,6 +1,7 @@
 ﻿using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Entities.ValueObjects;
 using Catalogue.Domaine.Enums;
+using Catalogue.Tests.Integration.ProductVariants;
 using System.Linq;
 
 namespace Catalogue.Tests.Domaine.Entities
@@ -78,6 +79,20 @@ namespace Catalogue.Tests.Domaine.Entities
             Product product = new(Guid.NewGuid(), "Razor Mouse");
             product.DesactivateProduct();
             Assert.Throws<InvalidOperationException>(() => product.DesactivateProduct());
+        }
+
+        [Fact]
+        public void Should_Throw_Exception_If_Product_Is_Inactivate_Whene_Try_To_AddVariant()
+        {
+            var company = new Company("Razor");
+            var product = new Product(company.Id, "Razor Mouse");
+            Money money = new(120m);
+            Sku sku = new("razor-mouse-101");
+
+            product.DesactivateProduct();
+
+            Assert.Throws<InvalidOperationException>(() => product.AddProductVariant(money, sku));
+            Assert.Empty(product.ProductVariants);
         }
     }
 }

@@ -11,6 +11,7 @@ namespace Catalogue.Infrastructure.Configurations
             builder.HasKey(p => p.Id);
             builder.Property(p => p.Name).HasMaxLength(150).IsRequired();
             builder.Property(p => p.CompanyId).IsRequired();
+            builder.Property(p => p.Status).HasConversion<string>();
             builder.HasOne(p => p.Company)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CompanyId)

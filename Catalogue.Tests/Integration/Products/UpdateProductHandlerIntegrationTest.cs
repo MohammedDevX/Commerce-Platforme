@@ -1,8 +1,12 @@
 ﻿using Catalogue.Application.Common.Exceptions;
 using Catalogue.Application.Products.Update;
 using Catalogue.Domaine.Entities;
+using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Repositories;
 using Catalogue.Tests.Infrastructure.Fixtures;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Runtime.InteropServices;
 
 namespace Catalogue.Tests.Integration.Products
 {
@@ -33,6 +37,19 @@ namespace Catalogue.Tests.Integration.Products
             await context.SaveChangesAsync(ct);
 
             await handler.Handle(command, ct);
+
+            var options = new DbContextOptionsBuilder<CatalogueDbContext>()
+                .UseSqlServer(context.Database.GetDbConnection()).Options;
+
+            await using var context2 = new CatalogueDbContext(options);
+            await context2.Database.UseTransactionAsync(transaction.GetDbTransaction());
+
+            var updatedProduct =  await new ProductRepository(context2).GetProductByIdAsync(product.Id, ct);
+
+            Assert.NotNull(updatedProduct);
+            Assert.Equal(updatedName, updatedProduct.Name);
+
+            await transaction.RollbackAsync(ct);
         }
 
         [Fact]
@@ -51,6 +68,8 @@ namespace Catalogue.Tests.Integration.Products
             await context.SaveChangesAsync(ct);
 
             await Assert.ThrowsAnyAsync<NotFoundException>(() => handler.Handle(command, ct));
+
+            await transaction.RollbackAsync(ct);
         }
     }
 }

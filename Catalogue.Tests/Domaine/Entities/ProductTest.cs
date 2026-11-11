@@ -1,5 +1,6 @@
 ﻿using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Entities.ValueObjects;
+using Catalogue.Domaine.Enums;
 using System.Linq;
 
 namespace Catalogue.Tests.Domaine.Entities
@@ -43,6 +44,40 @@ namespace Catalogue.Tests.Domaine.Entities
             product.AddProductVariant(new Money(140m), sku);
             Assert.Single(product.ProductVariants);
             Assert.True(product.ProductVariants?.Any(p => p.SKU.SKU == "RAZOR-101"));
+        }
+
+        [Fact]
+        public void Activate_ProductSatatus_Test()
+        {
+            Product product = new(Guid.NewGuid(), "Razor Mouse");
+            product.DesactivateProduct();
+            product.ActivateProduct();
+
+            Assert.Equal(ProductStatus.Activate, product.Status);
+        }
+
+        [Fact]
+        public void Desactivate_ProductSatatus_Test()
+        {
+            Product product = new(Guid.NewGuid(), "Razor Mouse");
+            product.DesactivateProduct();
+
+            Assert.Equal(ProductStatus.Desactivate, product.Status);
+        }
+
+        [Fact]
+        public void Should_Throw_Exception_If_Product_IsActivate_And_Call_ActivateProduct()
+        {
+            Product product = new(Guid.NewGuid(), "Razor Mouse");
+            Assert.Throws<InvalidOperationException>(() => product.ActivateProduct());
+        }
+
+        [Fact]
+        public void Should_Throw_Exception_If_Product_IsDesactivate_And_Call_DesactivateProduct()
+        {
+            Product product = new(Guid.NewGuid(), "Razor Mouse");
+            product.DesactivateProduct();
+            Assert.Throws<InvalidOperationException>(() => product.DesactivateProduct());
         }
     }
 }

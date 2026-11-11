@@ -1,4 +1,6 @@
 ﻿using Catalogue.Domaine.Entities.ValueObjects;
+using Catalogue.Domaine.Enums;
+using System.Net.NetworkInformation;
 
 namespace Catalogue.Domaine.Entities
 {
@@ -7,6 +9,7 @@ namespace Catalogue.Domaine.Entities
         public Guid Id { get; private set; }
         public Guid CompanyId { get; private set; }
         public string Name { get; private set; } = string.Empty;
+        public ProductStatus Status { get; private set; }
         public Company Company { get; set; }
         private readonly List<ProductVariant> _variants = new();
         // This syntax is an explisite {get => return _variants;}
@@ -29,6 +32,7 @@ namespace Catalogue.Domaine.Entities
 
             Id = Guid.NewGuid();
             CompanyId = companyId;
+            Status = ProductStatus.Activate;
         }
 
         public void Rename(string productName)
@@ -37,6 +41,28 @@ namespace Catalogue.Domaine.Entities
                 throw new ArgumentException("Product Name cannot be empty, null or contain only spaces");
 
             Name = productName.Trim();
+        }
+
+        public void ActivateProduct()
+        {
+            if (Status is ProductStatus.Desactivate)
+            {
+                Status = ProductStatus.Activate;
+                return;
+            }
+
+            throw new InvalidOperationException("The product is already activated");
+        }
+
+        public void DesactivateProduct()
+        {
+            if (Status is ProductStatus.Activate)
+            {
+                Status = ProductStatus.Desactivate;
+                return;
+            }
+
+            throw new InvalidOperationException("The product is already desactivited");
         }
 
         public void AddProductVariant(Money price, Sku sku)

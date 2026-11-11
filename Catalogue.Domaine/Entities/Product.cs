@@ -9,7 +9,7 @@ namespace Catalogue.Domaine.Entities
         public Guid Id { get; private set; }
         public Guid CompanyId { get; private set; }
         public string Name { get; private set; } = string.Empty;
-        public ProductStatus Status { get; private set; }
+        public ProductStatus Status { get; private set; } = ProductStatus.Activate;
         public Company Company { get; set; }
         private readonly List<ProductVariant> _variants = new();
         // This syntax is an explisite {get => return _variants;}
@@ -32,7 +32,6 @@ namespace Catalogue.Domaine.Entities
 
             Id = Guid.NewGuid();
             CompanyId = companyId;
-            Status = ProductStatus.Activate;
         }
 
         public void Rename(string productName)
@@ -45,7 +44,7 @@ namespace Catalogue.Domaine.Entities
 
         public void ActivateProduct()
         {
-            if (Status is ProductStatus.Desactivate)
+            if (Status is ProductStatus.Inactivate)
             {
                 Status = ProductStatus.Activate;
                 return;
@@ -58,7 +57,7 @@ namespace Catalogue.Domaine.Entities
         {
             if (Status is ProductStatus.Activate)
             {
-                Status = ProductStatus.Desactivate;
+                Status = ProductStatus.Inactivate;
                 return;
             }
 
@@ -67,6 +66,9 @@ namespace Catalogue.Domaine.Entities
 
         public void AddProductVariant(Money price, Sku sku)
         {
+            if (Status is ProductStatus.Inactivate)
+                return;
+
             ProductVariant productVariant = new(Id, price, sku);
             _variants.Add(productVariant);
         }

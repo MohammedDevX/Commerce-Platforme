@@ -1,5 +1,4 @@
 ﻿using Catalogue.Application.Common.Exceptions;
-using Catalogue.Application.Products.Activate;
 using Catalogue.Application.Products.Desactivate;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Enums;
@@ -50,7 +49,7 @@ namespace Catalogue.Tests.Integration.Products
                 .FirstOrDefaultAsync(p => p.Id == product.Id, ct);
 
             Assert.NotNull(desactivatedProduct);
-            Assert.Equal(ProductStatus.Desactivate, desactivatedProduct.Status);
+            Assert.Equal(ProductStatus.Inactivate, desactivatedProduct.Status);
 
             await transaction.RollbackAsync(ct);
         }

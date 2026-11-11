@@ -3,6 +3,6 @@
     public enum ProductStatus
     {
         Activate = 1,
-        Desactivate = 2
+        Inactivate = 2
     }
 }

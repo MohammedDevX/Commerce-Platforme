@@ -54,13 +54,19 @@ namespace Catalogue.Infrastructure.Persistence.Migrations
 
                     b.Property<string>("Status")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)")
+                        .HasDefaultValue("Activate");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", t =>
+                        {
+                            t.HasCheckConstraint("CK_Product_Status", "[Status] IN ('Activate', 'Inactivate')");
+                        });
                 });
 
             modelBuilder.Entity("Catalogue.Domaine.Entities.ProductVariant", b =>

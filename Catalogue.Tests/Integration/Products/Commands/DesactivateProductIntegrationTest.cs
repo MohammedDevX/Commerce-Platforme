@@ -1,5 +1,5 @@
 ﻿using Catalogue.Application.Common.Exceptions;
-using Catalogue.Application.Products.Desactivate;
+using Catalogue.Application.Products.Commands.Desactivate;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Enums;
 using Catalogue.Infrastructure.Persistence;
@@ -8,7 +8,7 @@ using Catalogue.Tests.Infrastructure.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace Catalogue.Tests.Integration.Products
+namespace Catalogue.Tests.Integration.Products.Commands
 {
     public class DesactivateProductIntegrationTest : IClassFixture<CatalogueDatabaseFixture>
     {

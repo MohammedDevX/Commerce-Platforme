@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 
 
-namespace Catalogue.Tests.Integration.Products
+namespace Catalogue.Tests.Integration.Products.Commands
 {
     public class CreateProductHandlerIntegrationTest : IClassFixture<CatalogueDatabaseFixture>
     {

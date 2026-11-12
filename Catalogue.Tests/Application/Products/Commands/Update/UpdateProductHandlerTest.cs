@@ -5,7 +5,7 @@ using Catalogue.Application.Products.Commands.Update;
 using Catalogue.Domaine.Entities;
 using Moq;
 
-namespace Catalogue.Tests.Application.Products.Update
+namespace Catalogue.Tests.Application.Products.Commands.Update
 {
     public class UpdateProductHandlerTest
     {

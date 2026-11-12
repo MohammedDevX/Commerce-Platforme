@@ -1,7 +1,4 @@
-﻿using Castle.Components.DictionaryAdapter.Xml;
-using Castle.DynamicProxy.Generators;
-using Catalogue.Application.Common.Abstractions.Persistence;
-using Catalogue.Application.ProductVariants.Create;
+﻿using Catalogue.Application.ProductVariants.Commands.Create;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Entities.ValueObjects;
 using Catalogue.Infrastructure.Persistence;

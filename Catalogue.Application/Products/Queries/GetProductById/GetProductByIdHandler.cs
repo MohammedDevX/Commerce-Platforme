@@ -1,5 +1,6 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence.Queries;
 using Catalogue.Application.Common.Exceptions;
+using Catalogue.Domaine.Entities;
 
 namespace Catalogue.Application.Products.Queries.GetProductById
 {
@@ -15,7 +16,7 @@ namespace Catalogue.Application.Products.Queries.GetProductById
         public async Task<ProductDetailsDto> Handle(GetProductByIdQuery query, CancellationToken ct)
         {
             return await _productQueries.GetByIdAsync(query.Id, ct) 
-                ?? throw new NotFoundException(nameof(ProductDetailsDto), query.Id);
+                ?? throw new NotFoundException(nameof(Product), query.Id);
         }
     }
 }

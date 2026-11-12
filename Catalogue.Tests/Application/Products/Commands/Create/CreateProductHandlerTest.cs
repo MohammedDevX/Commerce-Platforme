@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Query.Internal;
 using Moq;
 using System.Runtime.InteropServices;
 
-namespace Catalogue.Tests.Application.Products.Create
+namespace Catalogue.Tests.Application.Products.Commands.Create
 {
     public class CreateProductHandlerTest
     {

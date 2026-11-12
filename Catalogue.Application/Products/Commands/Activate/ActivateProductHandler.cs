@@ -1,7 +1,6 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
 using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Exceptions;
-using Catalogue.Application.Products.Desactivate;
 using Catalogue.Domaine.Entities;
 
 namespace Catalogue.Application.Products.Commands.Activate

@@ -1,56 +1,58 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
 using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Exceptions;
-using Catalogue.Application.Products.Commands.Activate;
+using Catalogue.Application.Products.Commands.Desactivate;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Enums;
 using Moq;
 
-namespace Catalogue.Tests.Application.Products.Activate
+namespace Catalogue.Tests.Application.Products.Commands.Desactivate
 {
-    public class ActivateProductTest
+    public class DesactivateProductTest
     {
         private readonly Mock<IProductRepository> _productRepository = new();
         private readonly Mock<IUnitOfWork> _unitOfWork = new();
-        private readonly ActivateProductHandler _activateProductHandler;
+        private readonly DesactivateProductHandler _desactivateProductHandler;
 
-        public ActivateProductTest() => _activateProductHandler = new ActivateProductHandler(
-            _productRepository.Object,
-            _unitOfWork.Object);
+        public DesactivateProductTest()
+        {
+            _desactivateProductHandler = new DesactivateProductHandler(
+                _productRepository.Object,
+                _unitOfWork.Object);
+        }
+
 
         [Fact]
-        public async Task ActivateProductHandler_Test()
+        public async Task DesactivateProductHandler_Test()
         {
             var product = new Product(Guid.NewGuid(), "Razor");
-            product.DesactivateProduct();
-            var command = new ActivateProductCommand(product.Id);
+            var command = new DesactivateProductCommand(product.Id);
 
             _productRepository
                 .Setup((pr) => pr.GetProductByIdAsync(product.Id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(product);
 
-            await _activateProductHandler.Handle(command, CancellationToken.None);
+            await _desactivateProductHandler.Handle(command, CancellationToken.None);
 
-            Assert.Equal(ProductStatus.Activate, product.Status);
+            Assert.Equal(ProductStatus.Inactivate, product.Status);
 
             _unitOfWork.Verify((u) => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Fact]
-        public async Task Should_Throw_Exception_If_Product_NotFound_And_Dont_ActivateProduct()
+        public async Task Should_Throw_Exception_If_Product_NotFound_And_Dont_DesactivateProduct()
         {
             var product = new Product(Guid.NewGuid(), "Razor Mouse");
-            product.DesactivateProduct();
-            var command = new ActivateProductCommand(product.Id);
+            var command = new DesactivateProductCommand(product.Id);
 
             _productRepository
                 .Setup((pr) => pr.GetProductByIdAsync(product.Id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync((Product)null!);
 
             await Assert.ThrowsAsync<NotFoundException>(
-                () => _activateProductHandler.Handle(command, CancellationToken.None));
+                () => _desactivateProductHandler.Handle(command, CancellationToken.None));
 
-            Assert.Equal(ProductStatus.Inactivate, product.Status);
+            Assert.Equal(ProductStatus.Activate, product.Status);
 
             _unitOfWork.Verify((u) => u.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }

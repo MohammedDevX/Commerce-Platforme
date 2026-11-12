@@ -1,5 +1,5 @@
 ﻿using Catalogue.Application.Common.Exceptions;
-using Catalogue.Application.Products.Update;
+using Catalogue.Application.Products.Commands.Update;
 using Catalogue.Domaine.Entities;
 using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Repositories;
@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Runtime.InteropServices;
 
-namespace Catalogue.Tests.Integration.Products
+namespace Catalogue.Tests.Integration.Products.Commands
 {
     public class UpdateProductHandlerIntegrationTest : IClassFixture<CatalogueDatabaseFixture>
     {

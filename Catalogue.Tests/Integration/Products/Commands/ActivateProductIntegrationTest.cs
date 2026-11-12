@@ -1,5 +1,7 @@
 ﻿using Catalogue.Application.Common.Exceptions;
-using Catalogue.Application.Products.Activate;
+using Catalogue.Application.Products.Commands.Activate;
+
+//using Catalogue.Application.Products.Commands.Activate;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Enums;
 using Catalogue.Infrastructure.Persistence;
@@ -9,7 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Runtime.InteropServices;
 
-namespace Catalogue.Tests.Integration.Products
+namespace Catalogue.Tests.Integration.Products.Commands
 {
     public class ActivateProductIntegrationTest : IClassFixture<CatalogueDatabaseFixture>
     {

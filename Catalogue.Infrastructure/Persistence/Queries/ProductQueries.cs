@@ -16,8 +16,9 @@ namespace Catalogue.Infrastructure.Persistence.Queries
         public async Task<ProductDetailsDto?> GetByIdAsync(Guid id, CancellationToken ct)
         {
             return await _context.Products
+                .AsNoTracking()
                 .Where(p => p.Id == id)
-                .Select(p => new ProductDetailsDto(p.Id, p.CompanyId, p.Name, p.Status))
+                .Select(p => new ProductDetailsDto(p.Id, p.CompanyId, p.Name, p.Status.ToString()))
                 .FirstOrDefaultAsync(ct);
         }
     }

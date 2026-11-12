@@ -1,6 +1,8 @@
 using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Application.Common.Abstractions.Persistence.Queries;
 using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Infrastructure.Persistence;
+using Catalogue.Infrastructure.Persistence.Queries;
 using Catalogue.Infrastructure.Persistence.Repositories;
 using Microsoft.EntityFrameworkCore;
 
@@ -20,6 +22,8 @@ builder.Services.AddDbContext<CatalogueDbContext>(opt =>
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IProductVariantRepository, ProductVariantRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
+builder.Services.AddScoped<IProductQueries, ProductQueries>();
+
 
 var app = builder.Build();
 

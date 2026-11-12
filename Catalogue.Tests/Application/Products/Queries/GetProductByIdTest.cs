@@ -2,7 +2,6 @@
 using Catalogue.Application.Common.Exceptions;
 using Catalogue.Application.Products.Queries.GetProductById;
 using Catalogue.Domaine.Entities;
-using Catalogue.Infrastructure.Persistence.Queries;
 using Moq;
 
 namespace Catalogue.Tests.Application.Products.Queries
@@ -29,12 +28,12 @@ namespace Catalogue.Tests.Application.Products.Queries
                 .Setup((pq) => pq.GetByIdAsync(query.Id, It.IsAny<CancellationToken>()))
                 .ReturnsAsync(dto);
 
-            await _handler.Handle(query, CancellationToken.None);
+            var res = await _handler.Handle(query, CancellationToken.None);
 
-            Assert.Equal(product.Id, dto.Id);
-            Assert.Equal(product.Name, dto.Name);
-            Assert.Equal(product.CompanyId, dto.CompanyId);
-            Assert.Equal(product.Status.ToString(), dto.Status);
+            Assert.Equal(product.Id, res.Id);
+            Assert.Equal(product.Name, res.Name);
+            Assert.Equal(product.CompanyId, res.CompanyId);
+            Assert.Equal(product.Status.ToString(), res.Status);
         }
 
         [Fact]
@@ -46,7 +45,7 @@ namespace Catalogue.Tests.Application.Products.Queries
                 .ReturnsAsync((ProductDetailsDto)null!);
 
             await Assert
-                .ThrowsAnyAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
+                .ThrowsAsync<NotFoundException>(() => _handler.Handle(query, CancellationToken.None));
 
 
         }

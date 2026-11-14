@@ -1,10 +1,8 @@
 ﻿
 using Catalogue.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.Options;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Testcontainers.MsSql;
 
 namespace Catalogue.Tests.Infrastructure.Fixtures
 {
@@ -21,9 +19,16 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
     public class CatalogueDatabaseFixture : IAsyncLifetime
     {
         private readonly string _connectionString;
+        private readonly MsSqlContainer _container;
+
 
         public CatalogueDatabaseFixture()
         {
+            string sqlServerImage = "mcr.microsoft.com/mssql/server:2022-latest";
+            _container = new MsSqlBuilder(sqlServerImage).
+                WithPassword("Your_password123!")
+                .Build();
+
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.Test.json")
@@ -35,11 +40,12 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
 
         public async Task DisposeAsync()
         {
-            await Task.CompletedTask;
+            await _container.DisposeAsync();
         }
 
         public async Task InitializeAsync()
         {
+            await _container.StartAsync();
             await using var context = CreateDbContext();
             await context.Database.MigrateAsync();
         }

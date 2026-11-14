@@ -1,21 +1,17 @@
-﻿using Catalogue.Application.Common.Exceptions;
-using Catalogue.Domaine.Entities;
+﻿using Catalogue.Domaine.Entities;
 using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Queries;
 using Catalogue.Tests.Infrastructure.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.ValueGeneration.Internal;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 
 namespace Catalogue.Tests.Infrastructure.Persistence.Queries
 {
-    public class ProductQueriesTest : IClassFixture<CatalogueDatabaseFixture>
+    public class ProductQueriesIntegrationTest : IClassFixture<CatalogueDatabaseFixture>
     {
         private readonly CatalogueDatabaseFixture _fixtuer;
 
-        public ProductQueriesTest(CatalogueDatabaseFixture fixture)
+        public ProductQueriesIntegrationTest(CatalogueDatabaseFixture fixture)
         {
             _fixtuer = fixture;
         }

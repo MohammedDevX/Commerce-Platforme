@@ -57,7 +57,7 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
         public CatalogueDbContext CreateDbContext()
         {
             var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-             .UseSqlServer()
+             .UseSqlServer(_connectionString)
                 .Options;
 
             return new CatalogueDbContext(options);

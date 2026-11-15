@@ -1,5 +1,4 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence.Queries;
-using Catalogue.Application.Common.Models;
 using Catalogue.Application.Products.Queries.GetProductById;
 using Catalogue.Application.Products.Queries.GetProducts;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +18,8 @@ namespace Catalogue.Infrastructure.Persistence.Queries
         {
             return await _context.Products
                 .AsNoTracking()
+                .OrderBy(p => p.Name)
+                .ThenBy(p => p.Id)
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize)
                 .Select(p => new ProductListItemDto(p.Id, p.Name, p.Status.ToString()))

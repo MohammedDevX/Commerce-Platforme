@@ -29,12 +29,12 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
                 WithPassword("Your_password123!")
                 .Build();
 
-            var configuration = new ConfigurationBuilder()
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.Test.json")
-                .Build();
+            //var configuration = new ConfigurationBuilder()
+            //    .SetBasePath(Directory.GetCurrentDirectory())
+            //    .AddJsonFile("appsettings.Test.json")
+            //    .Build();
 
-            _connectionString = configuration.GetConnectionString("catalogueConnectionString")
+            _connectionString = _container.GetConnectionString()
                 ?? throw new InvalidOperationException("ConnectionString configuration not found");
         }
 
@@ -57,7 +57,7 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
         public CatalogueDbContext CreateDbContext()
         {
             var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-             .UseSqlServer(_connectionString)
+             .UseSqlServer()
                 .Options;
 
             return new CatalogueDbContext(options);

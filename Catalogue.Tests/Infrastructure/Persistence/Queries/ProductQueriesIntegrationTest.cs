@@ -69,5 +69,7 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
 
             await transaction.RollbackAsync(ct);
         }
+
+
     }
 }

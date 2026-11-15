@@ -1,7 +1,6 @@
 ﻿
 using Catalogue.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Testcontainers.MsSql;
 
 namespace Catalogue.Tests.Infrastructure.Fixtures
@@ -18,25 +17,17 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
     /// </summary>
     public class CatalogueDatabaseFixture : IAsyncLifetime
     {
-        private readonly string _connectionString;
-        private readonly MsSqlContainer _container;
+        private MsSqlContainer _container = new MsSqlBuilder("mcr.microsoft.com/mssql/server:2022-latest")
+            .WithPassword("Your_password123!")
+            .Build();
 
-
-        public CatalogueDatabaseFixture()
-        {
-            string sqlServerImage = "mcr.microsoft.com/mssql/server:2022-latest";
-            _container = new MsSqlBuilder(sqlServerImage).
-                WithPassword("Your_password123!")
-                .Build();
-
-            //var configuration = new ConfigurationBuilder()
-            //    .SetBasePath(Directory.GetCurrentDirectory())
-            //    .AddJsonFile("appsettings.Test.json")
-            //    .Build();
-
-            _connectionString = _container.GetConnectionString()
-                ?? throw new InvalidOperationException("ConnectionString configuration not found");
-        }
+        //public CatalogueDatabaseFixture()
+        //{
+        //    var configuration = new ConfigurationBuilder()
+        //        .SetBasePath(Directory.GetCurrentDirectory())
+        //        .AddJsonFile("appsettings.Test.json")
+        //        .Build();
+        //}
 
         public async Task DisposeAsync()
         {
@@ -57,7 +48,7 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
         public CatalogueDbContext CreateDbContext()
         {
             var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-             .UseSqlServer(_connectionString)
+             .UseSqlServer(_container.GetConnectionString())
                 .Options;
 
             return new CatalogueDbContext(options);

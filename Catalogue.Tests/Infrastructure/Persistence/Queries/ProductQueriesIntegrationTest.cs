@@ -1,6 +1,7 @@
 ﻿using Catalogue.Domaine.Entities;
 using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Queries;
+using Catalogue.Tests.Common.Builders;
 using Catalogue.Tests.Infrastructure.Fixtures;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
@@ -70,6 +71,49 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
             await transaction.RollbackAsync(ct);
         }
 
+        [Fact]
+        public async Task GetAllAsync_Test()
+        {
+            await using var context = _fixtuer.CreateDbContext();
+            var ct = CancellationToken.None;
+            await using var context2 = _fixtuer.CreateDbContext();
 
+            var company = new CompanyBuilder().Build();
+            var p1 = new ProductBuilder().WithCompanyId(company.Id).Build();
+            var p2 = new ProductBuilder().WithCompanyId(company.Id).WithName("Hp Z-102").Build();
+
+            var queries = new ProductQueries(context2);
+
+            context.Companies.Add(company);
+            context.Products.AddRange(p1, p2);
+            await context.SaveChangesAsync(ct);
+
+            var result = await queries.GetAllAsync(10, 1, ct);
+
+            Assert.NotEmpty(result);
+            Assert.Equal(4, result.Count);
+        }
+
+        [Fact]
+        public async Task GetProductsCount_Test()
+        {
+            await using var context = _fixtuer.CreateDbContext();
+            var ct = CancellationToken.None;
+            await using var context2 = _fixtuer.CreateDbContext();
+
+            var company = new CompanyBuilder().Build();
+            var p1 = new ProductBuilder().WithCompanyId(company.Id).Build();
+            var p2 = new ProductBuilder().WithCompanyId(company.Id).WithName("Hp Z-102").Build();
+
+            var queries = new ProductQueries(context2);
+
+            context.Companies.Add(company);
+            context.Products.AddRange(p1, p2);
+            await context.SaveChangesAsync(ct);
+
+            var result = await queries.GetProductsCountAsync(ct);
+
+            Assert.Equal(2, result);
+        }
     }
 }

@@ -15,7 +15,6 @@
 2. [Solution Architecture & Layering](#2-solution-architecture--layering)
    - [Projects & Dependency Hierarchy](#projects--dependency-hierarchy)
    - [Layer Responsibilities & Boundary Invariants](#layer-responsibilities--boundary-invariants)
-   - [Architectural Topology (Mermaid)](#architectural-topology-mermaid)
    - [End-to-End Execution Flow: Variant Creation (Mermaid)](#end-to-end-execution-flow-variant-creation-mermaid)
 3. [Domain-Driven Design (DDD) & Business Modeling](#3-domain-driven-design-ddd--business-modeling)
    - [Entities vs Value Objects](#entities-vs-value-objects)

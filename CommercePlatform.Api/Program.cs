@@ -14,9 +14,11 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
+string connectionString = builder.Configuration.GetConnectionString("catalogueConnectionString") ??
+        throw new InvalidOperationException("Catalogue Connection String is missing!");
 builder.Services.AddDbContext<CatalogueDbContext>(opt =>
 {
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("catalogueConnectionString"));
+    opt.UseSqlServer(connectionString);
 });
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();

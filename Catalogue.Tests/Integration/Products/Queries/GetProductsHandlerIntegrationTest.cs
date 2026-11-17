@@ -24,9 +24,9 @@ namespace Catalogue.Tests.Integration.Products.Queries
         public async Task GetProductsHandler_Test()
         {
             var contexts = await _fixture.CreateSharedTransactionAsync();
-            var context = contexts.context1;
-            var context2 = contexts.context2;
-            var transaction = contexts.transaction;
+            await using var context = contexts.context1;
+            await using var context2 = contexts.context2;
+            await using var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
 
             var company = new CompanyBuilder().Build();
@@ -86,9 +86,9 @@ namespace Catalogue.Tests.Integration.Products.Queries
         public async Task GetProductsHandler_Filter_By_Name_Test()
         {
             var contexts = await _fixture.CreateSharedTransactionAsync();
-            var context = contexts.context1;
-            var context2 = contexts.context2;
-            var transaction = contexts.transaction;
+            await using var context = contexts.context1;
+            await using var context2 = contexts.context2;
+            await using var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
             var handler = new GetProductsHandler(new ProductQueries(context2));
             var query = new GetProductsQuery(5, 1);

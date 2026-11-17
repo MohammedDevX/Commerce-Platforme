@@ -20,9 +20,9 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Repositories
         public async Task Verify_If_Company_Exists()
         {
             var contexts = await _fixture.CreateSharedTransactionAsync();
-            var context = contexts.context1;
-            var context2 = contexts.context2;
-            var transaction = contexts.transaction;
+            await using var context = contexts.context1;
+            await using var context2 = contexts.context2;
+            await using var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
 
             var company = new Company("Microsoft");

@@ -22,9 +22,9 @@ namespace Catalogue.Tests.Integration.ProductVariants
         public async Task Add_ProductVariant_In_Database_Integration_Test()
         {
             var contexts = await _fixture.CreateSharedTransactionAsync();
-            var context = contexts.context1;
-            var context2 = contexts.context2;
-            var transaction = contexts.transaction;
+            await using var context = contexts.context1;
+            await using var context2 = contexts.context2;
+            await using var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
             var company = new Company("Razor");
             var produit = new Product(company.Id, "Razor mouse");

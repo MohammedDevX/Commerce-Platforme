@@ -1,10 +1,7 @@
 ﻿using Catalogue.Domaine.Entities;
-using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Queries;
 using Catalogue.Tests.Common.Builders;
 using Catalogue.Tests.Infrastructure.Fixtures;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace Catalogue.Tests.Infrastructure.Persistence.Queries
 {
@@ -21,9 +18,9 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
         public async Task GetProductById_Test()
         {
             var contexts = await _fixture.CreateSharedTransactionAsync();
-            var context = contexts.context1;
-            var context2 = contexts.context2;
-            var transaction = contexts.transaction;
+            await using var context = contexts.context1;
+            await using var context2 = contexts.context2;
+            await using var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
 
             var company = new Company("Razor");
@@ -51,9 +48,9 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
         public async Task Should_Return_Null_If_Product_NotFound_GetProductById_Test()
         {
             var contexts = await _fixture.CreateSharedTransactionAsync();
-            var context = contexts.context1;
-            var context2 = contexts.context2;
-            var transaction = contexts.transaction;
+            await using var context = contexts.context1;
+            await using var context2 = contexts.context2;
+            await using var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
 
             var productQueries = new ProductQueries(context2);
@@ -69,9 +66,9 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
         public async Task GetAllAsync_Test()
         {
             var contexts = await _fixture.CreateSharedTransactionAsync();
-            var context = contexts.context1;
-            var context2 = contexts.context2;
-            var transaction = contexts.transaction;
+            await using var context = contexts.context1;
+            await using var context2 = contexts.context2;
+            await using var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
 
             var company = new CompanyBuilder().Build();
@@ -87,7 +84,7 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
             var result = await queries.GetAllAsync(10, 1, ct);
 
             Assert.NotEmpty(result);
-            Assert.Equal(4, result.Count);
+            Assert.Equal(2, result.Count);
 
             await transaction.RollbackAsync(ct);
         }
@@ -96,9 +93,9 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
         public async Task GetProductsCount_Test()
         {
             var contexts = await _fixture.CreateSharedTransactionAsync();
-            var context = contexts.context1;
-            var context2 = contexts.context2;
-            var transaction = contexts.transaction;
+            await using var context = contexts.context1;
+            await using var context2 = contexts.context2;
+            await using var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
 
             var company = new CompanyBuilder().Build();

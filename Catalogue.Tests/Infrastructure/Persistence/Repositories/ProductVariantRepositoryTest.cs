@@ -2,13 +2,6 @@
 using Catalogue.Domaine.Entities.ValueObjects;
 using Catalogue.Infrastructure.Persistence.Repositories;
 using Catalogue.Tests.Infrastructure.Fixtures;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.EntityFrameworkCore.Storage;
-using System.Transactions;
-using Catalogue.Infrastructure.Persistence;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.TestPlatform.ObjectModel.Client;
 
 namespace Catalogue.Tests.Infrastructure.Persistence.Repositories
 {
@@ -39,8 +32,9 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Repositories
             var money = new Money(140m);
             CancellationToken ct = CancellationToken.None;
 
-            await using var context = _fixture.CreateDbContext();
-            await using var transaction = await context.Database.BeginTransactionAsync();
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var transaction = contexts.transaction;
             product.AddProductVariant(money, sku);
             context.Companies.Add(company);
             context.Products.Add(product);
@@ -54,13 +48,14 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Repositories
         [Fact]
         public async Task Check_If_Sku_Doesnt_Exists()
         {
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
-            await using var context = _fixture.CreateDbContext();
             var company = new Company("Logitech");
             var product = new Product(company.Id, "Logitech Z-1000");
             var sku = new Sku("Logitech-Z-1000");
             var money = new Money(150m);
-            await using var transaction = await context.Database.BeginTransactionAsync(ct);
 
             context.Companies.Add(company);
             context.Products.Add(product);
@@ -77,15 +72,15 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Repositories
         [Fact]
         public async Task Check_If_Sku_Alredy_Exists_In_Other_Poruct()
         {
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
-            await using var context = _fixture.CreateDbContext();
             var company = new Company("Logitech");
             var product = new Product(company.Id, "Logitech Z-1000 mouse");
             var product2 = new Product(company.Id, "Logitech12 keyboard");
             var sku = new Sku("Logitech-Z-1000");
             var money = new Money(150m);
-
-            await using var transaction = await context.Database.BeginTransactionAsync(ct);
 
             product.AddProductVariant(money, sku);
             context.Companies.Add(company);

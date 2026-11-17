@@ -1,6 +1,7 @@
 ﻿
 using Catalogue.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using Testcontainers.MsSql;
 
 namespace Catalogue.Tests.Infrastructure.Fixtures
@@ -52,6 +53,23 @@ namespace Catalogue.Tests.Infrastructure.Fixtures
                 .Options;
 
             return new CatalogueDbContext(options);
+        }
+
+        public async Task<(CatalogueDbContext context1, 
+            CatalogueDbContext context2, 
+            IDbContextTransaction transaction)> CreateSharedTransactionAsync(CancellationToken ct = default)
+        {
+            var context = CreateDbContext();
+            var transaction = await context.Database.BeginTransactionAsync(ct);
+
+            var options = new DbContextOptionsBuilder<CatalogueDbContext>()
+                .UseSqlServer(context.Database.GetDbConnection())
+                .Options;
+
+            var context2 = new CatalogueDbContext(options);
+            await context2.Database.UseTransactionAsync(transaction.GetDbTransaction(), ct);
+
+            return (context, context2, transaction);
         }
     }
 }

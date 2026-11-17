@@ -24,19 +24,14 @@ namespace Catalogue.Tests.Integration.Products.Queries
         [Fact]
         public async Task GetProducByIdHandler_Intergation_Test()
         {
-            await using var context = _fixture.CreateDbContext();
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var context2 = contexts.context2;
+            var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
-            await using var transaction = await context.Database.BeginTransactionAsync(ct);
 
             var company = new Company("Razor");
             var product = new Product(company.Id, "Razor Mouse");
-
-            var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-                .UseSqlServer(context.Database.GetDbConnection())
-                .Options;
-
-            await using var context2 = new CatalogueDbContext(options);
-            await context2.Database.UseTransactionAsync(transaction.GetDbTransaction());
 
             var query = new GetProductByIdQuery(product.Id);
             var handler = new GetProductByIdHandler(new ProductQueries(context2));
@@ -59,17 +54,11 @@ namespace Catalogue.Tests.Integration.Products.Queries
         [Fact]
         public async Task Should_Throw_Exception_If_Product_NotFound_GetProducByIdHandler_Intergation_Test()
         {
-            await using var context = _fixture.CreateDbContext();
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var context2 = contexts.context2;
+            var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
-            await using var transaction = await context.Database.BeginTransactionAsync(ct);
-
-            var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-                .UseSqlServer(context.Database.GetDbConnection())
-                .Options;
-
-            await using var context2 = new CatalogueDbContext(options);
-            await context2.Database.UseTransactionAsync(transaction.GetDbTransaction());
-
             var query = new GetProductByIdQuery(Guid.NewGuid());
             var handler = new GetProductByIdHandler(new ProductQueries(context2));
 

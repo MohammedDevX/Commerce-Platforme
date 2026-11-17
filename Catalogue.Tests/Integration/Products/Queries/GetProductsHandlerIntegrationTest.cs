@@ -1,8 +1,12 @@
 ﻿using Catalogue.Application.Products.Queries.GetProducts;
 using Catalogue.Domaine.Entities;
+using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Queries;
 using Catalogue.Tests.Common.Builders;
 using Catalogue.Tests.Infrastructure.Fixtures;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.Identity.Client;
 using System.ComponentModel.DataAnnotations;
 
 namespace Catalogue.Tests.Integration.Products.Queries
@@ -19,9 +23,12 @@ namespace Catalogue.Tests.Integration.Products.Queries
         [Fact]
         public async Task GetProductsHandler_Test()
         {
-            await using var context = _fixture.CreateDbContext();
-            await using var context2 = _fixture.CreateDbContext();
-            var ct = CancellationToken.None;
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var context2 = contexts.context2;
+            var transaction = contexts.transaction;
+            CancellationToken ct = CancellationToken.None;
+
             var company = new CompanyBuilder().Build();
             var products = new[]
             {
@@ -42,11 +49,13 @@ namespace Catalogue.Tests.Integration.Products.Queries
             var result = await handler.Handle(query, ct);
 
             Assert.NotEmpty(result.items);
-            Assert.Equal(12, result.totalCount);
+            Assert.Equal(6, result.totalCount);
             Assert.Equal(5, result.TotalItems);
             Assert.True(result.HasNext);
             Assert.False(result.HasPrevious);
-            Assert.Equal(3, result.TotalPages);
+            Assert.Equal(2, result.TotalPages);
+
+            await transaction.RollbackAsync(ct);
         }
 
         [Fact]
@@ -76,9 +85,12 @@ namespace Catalogue.Tests.Integration.Products.Queries
         [Fact]
         public async Task GetProductsHandler_Filter_By_Name_Test()
         {
-            await using var context = _fixture.CreateDbContext();
-            var ct = CancellationToken.None;
-            var handler = new GetProductsHandler(new ProductQueries(context));
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var context2 = contexts.context2;
+            var transaction = contexts.transaction;
+            CancellationToken ct = CancellationToken.None;
+            var handler = new GetProductsHandler(new ProductQueries(context2));
             var query = new GetProductsQuery(5, 1);
             var company = new CompanyBuilder().Build();
             var products = new[]
@@ -102,6 +114,8 @@ namespace Catalogue.Tests.Integration.Products.Queries
                 new[] { "ASUS PRO", "HP ELIT BOOK", "HP ELIT BOOK PRO", "LOGITECH 101", "MSI PREDATOR" },
                 result.items.Select(i => i.Name)
             );
+
+            await transaction.RollbackAsync(ct);
         }
     }
 }

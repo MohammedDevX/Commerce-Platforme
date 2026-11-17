@@ -19,18 +19,17 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Repositories
         [Fact]
         public async Task Verify_If_Company_Exists()
         {
-            await using var context = _fixture.CreateDbContext();
-            await using var transaction = await context.Database.BeginTransactionAsync();
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var context2 = contexts.context2;
+            var transaction = contexts.transaction;
+            CancellationToken ct = CancellationToken.None;
 
             var company = new Company("Microsoft");
 
             context.Companies.Add(company);
             await context.SaveChangesAsync();
-
-            var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-                .UseSqlServer(context.Database.GetDbConnection()).Options;
-            await using var context2 = new CatalogueDbContext(options);
-            await context2.Database.UseTransactionAsync(transaction.GetDbTransaction());
+            await context.SaveChangesAsync();
 
             var companyRepository = new CompanyRepository(context2);
             var existsCompany = await companyRepository.ExistsAsync(company.Id, CancellationToken.None);

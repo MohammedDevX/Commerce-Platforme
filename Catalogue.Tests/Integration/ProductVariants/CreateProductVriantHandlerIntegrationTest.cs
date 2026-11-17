@@ -21,10 +21,11 @@ namespace Catalogue.Tests.Integration.ProductVariants
         [Fact]
         public async Task Add_ProductVariant_In_Database_Integration_Test()
         {
-            await using var context = _fixture.CreateDbContext();
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var context2 = contexts.context2;
+            var transaction = contexts.transaction;
             CancellationToken ct = CancellationToken.None;
-            await using var transaction = await context.Database.BeginTransactionAsync(ct);
-
             var company = new Company("Razor");
             var produit = new Product(company.Id, "Razor mouse");
 
@@ -63,13 +64,6 @@ namespace Catalogue.Tests.Integration.ProductVariants
             // To let context2 join the transaction of context we should to create new context that use the
             // same sql connection used by context, so create use DbContextOptionsBuilder() and we passe the 
             // connection to UseSqlServer(connection)
-            var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-                .UseSqlServer(context.Database.GetDbConnection())
-                .Options;
-
-            var context2 = new CatalogueDbContext(options);
-
-            await context2.Database.UseTransactionAsync(transaction.GetDbTransaction());
 
             var product = await context2.Products
                 .Include(p => p.ProductVariants)

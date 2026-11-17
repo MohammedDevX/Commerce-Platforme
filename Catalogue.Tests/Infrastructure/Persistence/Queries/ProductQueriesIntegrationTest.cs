@@ -10,24 +10,21 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
 {
     public class ProductQueriesIntegrationTest : IClassFixture<CatalogueDatabaseFixture>
     {
-        private readonly CatalogueDatabaseFixture _fixtuer;
+        private readonly CatalogueDatabaseFixture _fixture;
 
         public ProductQueriesIntegrationTest(CatalogueDatabaseFixture fixture)
         {
-            _fixtuer = fixture;
+            _fixture = fixture;
         }
 
         [Fact]
         public async Task GetProductById_Test()
         {
-            await using var context = _fixtuer.CreateDbContext();
-            var ct = CancellationToken.None;
-            await using var transaction = await context.Database.BeginTransactionAsync(ct);
-            var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-                .UseSqlServer(context.Database.GetDbConnection())
-                .Options;
-            await using var context2 = new CatalogueDbContext(options);
-            await context2.Database.UseTransactionAsync(transaction.GetDbTransaction(), ct);
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var context2 = contexts.context2;
+            var transaction = contexts.transaction;
+            CancellationToken ct = CancellationToken.None;
 
             var company = new Company("Razor");
             var product = new Product(company.Id, "Razor Mouse");
@@ -53,14 +50,11 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
         [Fact]
         public async Task Should_Return_Null_If_Product_NotFound_GetProductById_Test()
         {
-            await using var context = _fixtuer.CreateDbContext();
-            var ct = CancellationToken.None;
-            await using var transaction = await context.Database.BeginTransactionAsync(ct);
-            var options = new DbContextOptionsBuilder<CatalogueDbContext>()
-                .UseSqlServer(context.Database.GetDbConnection())
-                .Options;
-            await using var context2 = new CatalogueDbContext(options);
-            await context2.Database.UseTransactionAsync(transaction.GetDbTransaction(), ct);
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var context2 = contexts.context2;
+            var transaction = contexts.transaction;
+            CancellationToken ct = CancellationToken.None;
 
             var productQueries = new ProductQueries(context2);
 
@@ -74,9 +68,11 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
         [Fact]
         public async Task GetAllAsync_Test()
         {
-            await using var context = _fixtuer.CreateDbContext();
-            var ct = CancellationToken.None;
-            await using var context2 = _fixtuer.CreateDbContext();
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var context2 = contexts.context2;
+            var transaction = contexts.transaction;
+            CancellationToken ct = CancellationToken.None;
 
             var company = new CompanyBuilder().Build();
             var p1 = new ProductBuilder().WithCompanyId(company.Id).Build();
@@ -92,14 +88,18 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
 
             Assert.NotEmpty(result);
             Assert.Equal(4, result.Count);
+
+            await transaction.RollbackAsync(ct);
         }
 
         [Fact]
         public async Task GetProductsCount_Test()
         {
-            await using var context = _fixtuer.CreateDbContext();
-            var ct = CancellationToken.None;
-            await using var context2 = _fixtuer.CreateDbContext();
+            var contexts = await _fixture.CreateSharedTransactionAsync();
+            var context = contexts.context1;
+            var context2 = contexts.context2;
+            var transaction = contexts.transaction;
+            CancellationToken ct = CancellationToken.None;
 
             var company = new CompanyBuilder().Build();
             var p1 = new ProductBuilder().WithCompanyId(company.Id).Build();
@@ -114,6 +114,8 @@ namespace Catalogue.Tests.Infrastructure.Persistence.Queries
             var result = await queries.GetProductsCountAsync(ct);
 
             Assert.Equal(2, result);
+
+            await transaction.RollbackAsync(ct);
         }
     }
 }

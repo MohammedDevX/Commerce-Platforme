@@ -230,7 +230,7 @@ The test project `Catalogue.Tests` references `Catalogue.Domaine` and `Catalogue
 
 ---
 
-<!--### Architectural Topology (Mermaid)
+Architectural Topology (Mermaid)
 
 ```mermaid
 graph TD
@@ -295,7 +295,7 @@ graph TD
     Variant --> Money
     Variant --> Sku
 ```
--->
+
 ---
 
 ### End-to-End Execution Flow: Variant Creation (Mermaid)

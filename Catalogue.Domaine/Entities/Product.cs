@@ -6,9 +6,12 @@ namespace Catalogue.Domaine.Entities
 {
     public class Product
     {
+        private const int MaxImages = 5;
         public Guid Id { get; private set; }
         public Guid CompanyId { get; private set; }
         public string Name { get; private set; } = string.Empty;
+        public string Description { get; private set; }
+        public Guid BrandId { get; private set; }
         public ProductStatus Status { get; private set; } = ProductStatus.Activate;
         public Company Company { get; set; }
         private readonly List<ProductVariant> _variants = new();
@@ -18,6 +21,8 @@ namespace Catalogue.Domaine.Entities
          * the class try to modify in the collection an InvalidCastException is thrown
          */
         public IReadOnlyCollection<ProductVariant> ProductVariants => _variants;//.AsReadOnly();
+        private readonly List<ProductImage> _images = new();
+        public IReadOnlyCollection<ProductImage> ProductImages => _images.AsReadOnly();
 
         private Product()
         {
@@ -71,6 +76,23 @@ namespace Catalogue.Domaine.Entities
 
             ProductVariant productVariant = new(Id, price, sku);
             _variants.Add(productVariant);
+        }
+
+        public void AddImage(string fileKey, string type, long size)
+        {
+            var imagesCount = ProductImages.Count();
+            if (imagesCount > MaxImages)
+                throw new InvalidOperationException("Product cannot have more than 5 images");
+
+            var isPrimaryImageExists = ProductImages.Any(i => i.IsPrimary == true);
+            bool isPrimary = false;
+            if (!isPrimaryImageExists)
+            {
+                isPrimary = true;
+            }
+
+            var productImage = ProductImage.Create(Id, fileKey, type, isPrimary, size);
+            _images.Add(productImage);
         }
     }
 }

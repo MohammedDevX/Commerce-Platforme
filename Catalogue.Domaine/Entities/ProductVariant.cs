@@ -1,4 +1,5 @@
 ﻿using Catalogue.Domaine.Entities.ValueObjects;
+using Catalogue.Domaine.Enums;
 using System.Text.RegularExpressions;
 
 namespace Catalogue.Domaine.Entities
@@ -9,6 +10,7 @@ namespace Catalogue.Domaine.Entities
         public Guid ProductId { get; private set; }
         public Money Price { get; private set; }
         public Sku SKU { get; private set; }
+        public ProductStatus Status { get; private set; } = ProductStatus.Activate;
         public Product Product { get; set; }
 
         private ProductVariant()

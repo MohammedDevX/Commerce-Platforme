@@ -17,6 +17,12 @@ namespace Catalogue.Infrastructure.Configurations
             builder.Property(p => p.CompanyId).IsRequired();
             builder.Property(p => p.Status).HasMaxLength(20).HasDefaultValue(ProductStatus.Activate)
                 .HasConversion<string>();
+            builder.Navigation(p => p.ProductVariants)
+                .HasField("_variants")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
+            builder.Navigation(p => p.ProductImages)
+                .HasField("_images")
+                .UsePropertyAccessMode(PropertyAccessMode.Field);
             builder.HasOne(p => p.Company)
                 .WithMany(c => c.Products)
                 .HasForeignKey(p => p.CompanyId)

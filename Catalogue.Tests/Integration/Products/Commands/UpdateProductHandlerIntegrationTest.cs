@@ -1,7 +1,7 @@
 ﻿using Catalogue.Application.Common.Exceptions;
 using Catalogue.Application.Products.Commands.Update;
 using Catalogue.Domaine.Entities;
-using Catalogue.Infrastructure.Persistence;
+using Catalogue.Infrastructure.Data;
 using Catalogue.Infrastructure.Persistence.Repositories;
 using Catalogue.Tests.Infrastructure.Fixtures;
 using Microsoft.EntityFrameworkCore;

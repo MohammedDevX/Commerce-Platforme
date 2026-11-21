@@ -5,6 +5,8 @@
         public Guid Id { get; private set; }
         public Guid ProductId { get; private set; }
         public string FileKey { get; private set; } = null!;
+        public string ContentType { get; private set; } = null!;
+        public long Size { get; private set; }
         public bool IsPrimary { get; private set; }
         public Product Product { get; private set; } = null!;
 
@@ -14,13 +16,18 @@
         public static ProductImage Create(Guid productId, string fileKey, string type, bool isPrimary, long size)
         {
             if(productId == Guid.Empty)
-                throw new ArgumentException($"{nameof(productId)} is required");
+                throw new ArgumentException("ProductId is required");
+
+            if (string.IsNullOrEmpty(fileKey.Trim()))
+                throw new ArgumentException("File key is required");
 
             return new ProductImage()
             {
                 Id = new Guid(),
                 ProductId = productId,
                 FileKey = fileKey,
+                ContentType = type,
+                Size = size,
                 IsPrimary = isPrimary
             };
         }

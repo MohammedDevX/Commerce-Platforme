@@ -3,7 +3,7 @@ using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Abstractions.Storage;
 using Catalogue.Application.Common.Exceptions;
 using Catalogue.Application.Common.Generators;
-using Catalogue.Application.Common.Validations;
+using Catalogue.Application.ProductImage.Validations;
 using Catalogue.Domaine.Entities;
 
 namespace Catalogue.Application.ProductImage.Create
@@ -31,14 +31,21 @@ namespace Catalogue.Application.ProductImage.Create
             if (product is null)
                 throw new NotFoundException(nameof(Product), command.ProductId);
 
-            string fileKey = FileKeyGenerator.Generate(command.FileName);
+            string fileKey = FileKeyGenerator.Generate(product.Id, command.FileName);
             FileUploadValidator.Validate(fileKey, command.ContentType, command.Size);
 
-            string fileName = await _fileStorage.SaveAsync(command.Content, command.FileName, fileKey, ct);
-
             product.AddImage(fileKey, command.ContentType, command.Size);
+            
+            await _fileStorage.SaveAsync(command.Content, command.FileName, fileKey, ct);
 
-            await _unitOfWork.SaveChangesAsync(ct);
+            try
+            {
+                await _unitOfWork.SaveChangesAsync(ct);
+            } catch (Exception ex)
+            {
+                // Delete the uploaded image from Disk after implementing DeleteAsync()
+                throw;
+            }
         }
     }
 }

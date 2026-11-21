@@ -20,11 +20,11 @@ namespace Catalogue.Domaine.Entities
          * And .AsReadOnly() wrap the original collection into ReadOnlyCollection so if someone outside of
          * the class try to modify in the collection an InvalidCastException is thrown
          */
-        public IReadOnlyCollection<ProductVariant> ProductVariants => _variants;//.AsReadOnly();
+        public IReadOnlyCollection<ProductVariant> ProductVariants => _variants.AsReadOnly();
         private readonly List<ProductImage> _images = new();
         public IReadOnlyCollection<ProductImage> ProductImages => _images.AsReadOnly();
 
-        private Product()
+        public Product()
         {
         }
 
@@ -80,11 +80,11 @@ namespace Catalogue.Domaine.Entities
 
         public void AddImage(string fileKey, string type, long size)
         {
-            var imagesCount = ProductImages.Count();
+            var imagesCount = _images.Count();
             if (imagesCount > MaxImages)
                 throw new InvalidOperationException("Product cannot have more than 5 images");
 
-            var isPrimaryImageExists = ProductImages.Any(i => i.IsPrimary == true);
+            var isPrimaryImageExists = _images.Any(i => i.IsPrimary == true);
             bool isPrimary = false;
             if (!isPrimaryImageExists)
             {

@@ -1,4 +1,5 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Infrastructure.Data;
 
 namespace Catalogue.Infrastructure.Persistence.Repositories
 {

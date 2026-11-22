@@ -2,7 +2,7 @@
 using Catalogue.Application.Products.Commands.Desactivate;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Enums;
-using Catalogue.Infrastructure.Data;
+using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Repositories;
 using Catalogue.Tests.Infrastructure.Fixtures;
 using Microsoft.EntityFrameworkCore;

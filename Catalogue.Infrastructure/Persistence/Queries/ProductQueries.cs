@@ -1,7 +1,6 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence.Queries;
 using Catalogue.Application.Products.Queries.GetProductById;
 using Catalogue.Application.Products.Queries.GetProducts;
-using Catalogue.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalogue.Infrastructure.Persistence.Queries

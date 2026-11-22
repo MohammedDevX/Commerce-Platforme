@@ -1,6 +1,5 @@
 ﻿using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Domaine.Entities;
-using Catalogue.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalogue.Infrastructure.Persistence.Repositories

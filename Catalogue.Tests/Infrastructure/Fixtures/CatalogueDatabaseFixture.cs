@@ -1,5 +1,5 @@
 ﻿
-using Catalogue.Infrastructure.Data;
+using Catalogue.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Testcontainers.MsSql;

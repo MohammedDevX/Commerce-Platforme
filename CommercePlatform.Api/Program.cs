@@ -10,7 +10,7 @@ using Catalogue.Application.Products.Commands.Update;
 using Catalogue.Application.Products.Queries.GetProductById;
 using Catalogue.Application.Products.Queries.GetProducts;
 using Catalogue.Application.ProductVariants.Commands.Create;
-using Catalogue.Infrastructure.Data;
+using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Queries;
 using Catalogue.Infrastructure.Persistence.Repositories;
 using Catalogue.Infrastructure.Persistence.Storage;

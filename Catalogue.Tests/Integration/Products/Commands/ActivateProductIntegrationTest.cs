@@ -4,7 +4,7 @@ using Catalogue.Application.Products.Commands.Activate;
 //using Catalogue.Application.Products.Commands.Activate;
 using Catalogue.Domaine.Entities;
 using Catalogue.Domaine.Enums;
-using Catalogue.Infrastructure.Data;
+using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Repositories;
 using Catalogue.Tests.Infrastructure.Fixtures;
 using Microsoft.EntityFrameworkCore;

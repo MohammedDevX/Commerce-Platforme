@@ -3,10 +3,10 @@ using Catalogue.Application.Common.Abstractions.Persistence.Queries;
 using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Abstractions.Storage;
 using Catalogue.Application.Common.Options;
-using Catalogue.Application.ProductImage.Create;
 using Catalogue.Application.Products.Commands.Activate;
 using Catalogue.Application.Products.Commands.Create;
 using Catalogue.Application.Products.Commands.Desactivate;
+using Catalogue.Application.Products.Commands.ProductImage.AddImage;
 using Catalogue.Application.Products.Commands.Update;
 using Catalogue.Application.Products.Queries.GetProductById;
 using Catalogue.Application.Products.Queries.GetProducts;
@@ -47,7 +47,7 @@ builder.Services.AddScoped<GetProductByIdHandler>();
 builder.Services.AddScoped<GetProductsHandler>();
 builder.Services.AddScoped<CreateProductVariantHandler>();
 builder.Services.AddScoped<IFileStorage, LocalFileStorage>();
-builder.Services.AddScoped<UploadImageHandler>();
+builder.Services.AddScoped<AddProductImageHandler>();
 builder.Services.AddOptions<ImageStorageOptions>()
     .Bind(builder.Configuration.GetSection(ImageStorageOptions.SectionName))
     .ValidateOnStart();

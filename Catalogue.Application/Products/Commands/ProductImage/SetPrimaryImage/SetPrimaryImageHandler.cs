@@ -1,0 +1,30 @@
+﻿using Catalogue.Application.Common.Abstractions.Persistence;
+using Catalogue.Application.Common.Abstractions.Persistence.Queries;
+using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
+using Catalogue.Application.Common.Exceptions;
+using Catalogue.Domaine.Entities;
+
+namespace Catalogue.Application.Products.Commands.ProductImage.SetPrimaryImage
+{
+    public class SetPrimaryImageHandler
+    {
+        private readonly IProductRepository _productRepository;
+        private readonly IUnitOfWork _unitOfWork;
+
+        public SetPrimaryImageHandler(IProductRepository productRepository, IUnitOfWork unitOfWork)
+        {
+            _productRepository = productRepository;
+            _unitOfWork = unitOfWork;
+        }
+
+        public async Task Handle(SetPrimaryImageCommand command, CancellationToken ct)
+        {
+            var product = await _productRepository.GetProductByIdAsync(command.ProductId, ct) 
+                ?? throw new NotFoundException(nameof(Product), command.ProductId);
+
+            product.SetPrimaryImage(command.ProductImageId);
+
+            await _unitOfWork.SaveChangesAsync(ct);
+        }
+    }
+}

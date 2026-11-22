@@ -31,5 +31,9 @@
                 IsPrimary = isPrimary
             };
         }
+
+        internal void MarkAsPrimary() => IsPrimary = true;
+        internal void UnmarkAsPrimary() => IsPrimary = false;
+
     }
 }

@@ -1,6 +1,6 @@
-﻿using Catalogue.Domaine.Entities.ValueObjects;
+﻿using Catalogue.Domaine.Entities.Exceptions;
+using Catalogue.Domaine.Entities.ValueObjects;
 using Catalogue.Domaine.Enums;
-using System.Net.NetworkInformation;
 
 namespace Catalogue.Domaine.Entities
 {
@@ -93,6 +93,22 @@ namespace Catalogue.Domaine.Entities
 
             var productImage = ProductImage.Create(Id, fileKey, type, isPrimary, size);
             _images.Add(productImage);
+        }
+
+        public void SetPrimaryImage(Guid imageId)
+        {
+            var image = _images.SingleOrDefault(i => i.Id == imageId) ??
+                throw new NotFoundException(nameof(ProductImage), imageId);
+                
+            if (image.IsPrimary)
+                return;
+
+            foreach (var item in _images)
+            {
+                item.UnmarkAsPrimary();
+            }
+
+            image.MarkAsPrimary();
         }
     }
 }

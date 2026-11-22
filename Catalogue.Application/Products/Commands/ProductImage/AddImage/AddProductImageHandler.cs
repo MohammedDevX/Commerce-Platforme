@@ -3,18 +3,18 @@ using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Abstractions.Storage;
 using Catalogue.Application.Common.Exceptions;
 using Catalogue.Application.Common.Generators;
-using Catalogue.Application.ProductImage.Validations;
+using Catalogue.Application.Products.Commands.ProductImage.Validations;
 using Catalogue.Domaine.Entities;
 
-namespace Catalogue.Application.ProductImage.Create
+namespace Catalogue.Application.Products.Commands.ProductImage.AddImage
 {
-    public class UploadImageHandler
+    public class AddProductImageHandler
     {
         private readonly IFileStorage _fileStorage;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IProductRepository _productRepository;
 
-        public UploadImageHandler(
+        public AddProductImageHandler(
             IFileStorage fileStorage, 
             IUnitOfWork unitOfWork, 
             IProductRepository productRepository)
@@ -24,7 +24,7 @@ namespace Catalogue.Application.ProductImage.Create
             _productRepository = productRepository;
         }
 
-        public async Task Handle(UploadImageCommand command, CancellationToken ct)
+        public async Task Handle(AddProductImageCommand command, CancellationToken ct)
         {
             var product = await _productRepository.GetProductByIdAsync(command.ProductId, ct);
 

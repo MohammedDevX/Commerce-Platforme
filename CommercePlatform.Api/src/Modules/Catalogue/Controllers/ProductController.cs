@@ -1,5 +1,5 @@
 ﻿using Catalogue.Application.Common.Models;
-using Catalogue.Application.ProductImage.Create;
+using Catalogue.Application.Products.Commands.ProductImage.AddImage;
 using Catalogue.Application.Products.Queries.GetProducts;
 using Catalogue.Infrastructure.Persistence;
 using CommercePlatform.Api.src.Dtos;
@@ -14,7 +14,7 @@ namespace CommercePlatform.Api.src.Modules.Catalogue.Controllers
     {
         private readonly GetProductsHandler _getProductsHandler;
 
-        public ProductController(GetProductsHandler getProductsHandler, UploadImageHandler uploadImageHandler)
+        public ProductController(GetProductsHandler getProductsHandler, AddProductImageHandler uploadImageHandler)
         {
             _getProductsHandler = getProductsHandler;
         }

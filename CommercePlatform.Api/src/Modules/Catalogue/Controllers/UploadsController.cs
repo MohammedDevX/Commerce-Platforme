@@ -1,4 +1,4 @@
-﻿using Catalogue.Application.ProductImage.Create;
+﻿using Catalogue.Application.Products.Commands.ProductImage.AddImage;
 using CommercePlatform.Api.src.Dtos;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,9 +8,9 @@ namespace CommercePlatform.Api.src.Modules.Catalogue.Controllers
     [ApiController]
     public class UploadsController : ControllerBase
     {
-        private readonly UploadImageHandler _uploadImageHandler;
+        private readonly AddProductImageHandler _uploadImageHandler;
 
-        public UploadsController(UploadImageHandler uploadImageHandler)
+        public UploadsController(AddProductImageHandler uploadImageHandler)
         {
             _uploadImageHandler = uploadImageHandler;
         }
@@ -22,7 +22,7 @@ namespace CommercePlatform.Api.src.Modules.Catalogue.Controllers
             CancellationToken ct)
         {
             await using Stream content = request.File.OpenReadStream();
-            UploadImageCommand command = new(
+            AddProductImageCommand command = new(
                 request.ProductId,
                 content, request.File.FileName,
                 request.File.ContentType,

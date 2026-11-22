@@ -1,7 +1,7 @@
 ﻿using Catalogue.Application.Common.Options;
 using Microsoft.Extensions.Options;
 
-namespace Catalogue.Application.ProductImage.Validations
+namespace Catalogue.Application.Products.Commands.ProductImage.Validations
 {
     internal class FileUploadValidator
     {

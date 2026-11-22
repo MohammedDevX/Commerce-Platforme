@@ -1,6 +1,6 @@
-﻿namespace Catalogue.Application.ProductImage.Create
+﻿namespace Catalogue.Application.Products.Commands.ProductImage.AddImage
 {
-    public record UploadImageCommand(
+    public record AddProductImageCommand(
         Guid ProductId, 
         Stream Content, 
         string FileName, 

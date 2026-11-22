@@ -1,17 +1,22 @@
 ﻿using Catalogue.Application.Common.Abstractions.Storage;
-using Microsoft.Extensions.Configuration;
+using Catalogue.Infrastructure.Options;
+using Microsoft.Extensions.Options;
 
 namespace Catalogue.Infrastructure.Persistence.Storage
 {
     public class LocalFileStorage : IFileStorage
     {
-        // The uploads folder should be outside of the executable directory, and inject the path in ENV
-        private readonly string _UploadedFolderPath = Path.Combine(Directory.GetCurrentDirectory(), "Uploads");
+        private readonly ImageStorageOptions _imageStorageOptions;
+        private readonly string _UploadedFolderPath = null!;
 
-        public LocalFileStorage()
+        public LocalFileStorage(IOptions<ImageStorageOptions> options)
         {
-            Directory.CreateDirectory(_UploadedFolderPath);
+            _imageStorageOptions = options.Value;
+            Path.Combine(Directory.GetCurrentDirectory(), _imageStorageOptions.RootPath);
+            Directory.CreateDirectory(_UploadedFolderPath!);
         }
+
+        // The uploads folder should be outside of the executable directory, and inject the path in ENV
 
         public async Task SaveAsync(Stream content, string fileName, string fileKey, CancellationToken ct = default)
         {

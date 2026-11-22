@@ -23,7 +23,7 @@
 
             return new ProductImage()
             {
-                Id = new Guid(),
+                Id = Guid.NewGuid(),
                 ProductId = productId,
                 FileKey = fileKey,
                 ContentType = type,

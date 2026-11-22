@@ -2,6 +2,7 @@ using Catalogue.Application.Common.Abstractions.Persistence;
 using Catalogue.Application.Common.Abstractions.Persistence.Queries;
 using Catalogue.Application.Common.Abstractions.Persistence.Repositories;
 using Catalogue.Application.Common.Abstractions.Storage;
+using Catalogue.Application.Common.Options;
 using Catalogue.Application.ProductImage.Create;
 using Catalogue.Application.Products.Commands.Activate;
 using Catalogue.Application.Products.Commands.Create;
@@ -10,6 +11,7 @@ using Catalogue.Application.Products.Commands.Update;
 using Catalogue.Application.Products.Queries.GetProductById;
 using Catalogue.Application.Products.Queries.GetProducts;
 using Catalogue.Application.ProductVariants.Commands.Create;
+using Catalogue.Infrastructure.Options;
 using Catalogue.Infrastructure.Persistence;
 using Catalogue.Infrastructure.Persistence.Queries;
 using Catalogue.Infrastructure.Persistence.Repositories;
@@ -46,6 +48,13 @@ builder.Services.AddScoped<GetProductsHandler>();
 builder.Services.AddScoped<CreateProductVariantHandler>();
 builder.Services.AddScoped<IFileStorage, LocalFileStorage>();
 builder.Services.AddScoped<UploadImageHandler>();
+builder.Services.AddOptions<ImageStorageOptions>()
+    .Bind(builder.Configuration.GetSection(ImageStorageOptions.SectionName))
+    .ValidateOnStart();
+
+builder.Services.AddOptions<ImageStorageRulesOptions>()
+    .Bind(builder.Configuration.GetSection(ImageStorageRulesOptions.SectionName))
+    .ValidateOnStart();
 
 
 var app = builder.Build();

@@ -1,9 +1,21 @@
-﻿namespace Catalogue.Application.ProductImage.Validations
+﻿using Catalogue.Application.Common.Options;
+using Microsoft.Extensions.Options;
+
+namespace Catalogue.Application.ProductImage.Validations
 {
     internal class FileUploadValidator
     {
-        private static string[] _AllowedExtensions = ["image/jpeg", "image/webp"];
-        private const long MaxSize = 1000000; // 1mb
+        private readonly ImageStorageRulesOptions _settings;
+        private static string[] _AllowedExtensions = null!;
+        private static long MaxSize;
+
+        public FileUploadValidator(IOptions<ImageStorageRulesOptions> options)
+        {
+            _settings = options.Value;
+            _AllowedExtensions = _settings.AllowedExtensions;
+            MaxSize = _settings.MaxSize;
+        }
+
         public static void Validate(string fileKey, string type, long size)
         {
             if (!_AllowedExtensions.Contains(type))

@@ -27,4 +27,8 @@
     <ProjectReference Include="..\Catalogue.Infrastructure\Catalogue.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="src\Dtos\Responses\" />
+  </ItemGroup>
+
 </Project>

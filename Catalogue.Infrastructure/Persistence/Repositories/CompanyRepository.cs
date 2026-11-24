@@ -21,5 +21,15 @@ namespace Catalogue.Infrastructure.Persistence.Repositories
         {
             return await _context.Companies.AsNoTracking().AnyAsync(c => c.Id == companyId, ct);
         }
+
+        public void Add(Company company, CancellationToken ct)
+        {
+            _context.Add(company);
+        }
+
+        public void Delete(Company company)
+        {
+            _context.Companies.Remove(company);
+        }
     }
 }

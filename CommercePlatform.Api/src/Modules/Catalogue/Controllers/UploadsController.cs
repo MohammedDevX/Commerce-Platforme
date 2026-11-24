@@ -1,5 +1,5 @@
 ﻿using Catalogue.Application.Products.Commands.ProductImage.AddImage;
-using CommercePlatform.Api.src.Dtos;
+using CommercePlatform.Api.src.Dtos.Requests.Uploads;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CommercePlatform.Api.src.Modules.Catalogue.Controllers
@@ -31,6 +31,7 @@ namespace CommercePlatform.Api.src.Modules.Catalogue.Controllers
 
             await _uploadImageHandler.Handle(command, ct);
 
+            //return CreatedAtAction()
             return Ok();
         }
 

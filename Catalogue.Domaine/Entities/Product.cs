@@ -10,7 +10,7 @@ namespace Catalogue.Domaine.Entities
         public Guid Id { get; private set; }
         public Guid CompanyId { get; private set; }
         public string Name { get; private set; } = string.Empty;
-        public string Description { get; private set; }
+        public string Description { get; private set; } = null!;
         public Guid BrandId { get; private set; }
         public ProductStatus Status { get; private set; } = ProductStatus.Activate;
         public Company Company { get; set; }
@@ -28,15 +28,20 @@ namespace Catalogue.Domaine.Entities
         {
         }
 
-        public Product(Guid companyId, string productName) 
+        public Product(Guid companyId, string productName, string description, Guid brandId) 
         {
             if (companyId == Guid.Empty)
                 throw new ArgumentException("CompanyId cannot by empty");
 
+            if (brandId == Guid.Empty)
+                throw new ArgumentException("BrandId cannot by empty");
+
             Rename(productName);
+            AddDescription(description);
 
             Id = Guid.NewGuid();
             CompanyId = companyId;
+            BrandId = brandId;
         }
 
         public void Rename(string productName)
@@ -45,6 +50,14 @@ namespace Catalogue.Domaine.Entities
                 throw new ArgumentException("Product Name cannot be empty, null or contain only spaces");
 
             Name = productName.Trim();
+        }
+
+        private void AddDescription(string description)
+        {
+            if (string.IsNullOrWhiteSpace(description))
+                throw new ArgumentException("Description cannot be empty, null or contain only spaces");
+
+            Description = description;
         }
 
         public void ActivateProduct()
@@ -66,7 +79,7 @@ namespace Catalogue.Domaine.Entities
                 return;
             }
 
-            throw new InvalidOperationException("The product is already desactivited");
+            throw new InvalidOperationException("The product is already inactive");
         }
 
         public void AddProductVariant(Money price, Sku sku)

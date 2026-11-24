@@ -1,5 +1,5 @@
 ﻿namespace Catalogue.Application.Products.Commands.Create
 {
-    public record CreateProductCommand(Guid companyId, string name)
+    public record CreateProductCommand(Guid companyId, string name, string description, Guid brandId)
     {}
 }

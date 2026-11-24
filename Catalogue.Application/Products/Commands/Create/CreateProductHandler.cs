@@ -20,15 +20,22 @@ namespace Catalogue.Application.Products.Commands.Create
             _unitOfWork = unitOfWork;
         }
 
-        public async Task Handle(CreateProductCommand commande, CancellationToken ct)
+        public async Task<CreateProductResponseDto> Handle(CreateProductCommand commande, CancellationToken ct)
         {
             var isCompnyExists = await _companyRepository.ExistsAsync(commande.companyId, ct);
             if (isCompnyExists == false)
                 throw new NotFoundException(nameof(Company), commande.companyId);
 
-            var product = new Product(commande.companyId, commande.name);
+            var product = new Product(commande.companyId, commande.name, commande.description, commande.brandId);
             _productRepository.Add(product);
             await _unitOfWork.SaveChangesAsync(ct);
+
+            return new CreateProductResponseDto(product.Id, 
+                product.CompanyId, 
+                product.Name, 
+                product.Status.ToString(), 
+                product.Description, 
+                product.BrandId);
         }
     }
 }
